@@ -274,7 +274,7 @@ $posts = [
                         <!--фото-->
                         <?php elseif($post['type'] === 'photo') : ?>
                             <div class="post-photo__image-wrapper">
-                                <img src="img/<?=htmlspecialchars($post['content']);?>" alt="Фото от пользователя" width="360" height="240">
+                                <img src="img/<?=$post['content'];?>" alt="Фото от пользователя" width="360" height="240">
                             </div>
                         <!--ссылка-->
                         <?php elseif($post['type'] === 'link') : ?>
@@ -301,7 +301,7 @@ $posts = [
                             <a class="post__author-link" href="#" title="Автор">
                                 <div class="post__avatar-wrapper">
                                     <!--укажите путь к файлу аватара-->
-                                    <img class="post__author-avatar" src="img/<?=($post['avatar']);?>" alt="Аватар пользователя">
+                                    <img class="post__author-avatar" src="img/<?=$post['avatar'];?>" alt="Аватар пользователя">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?=htmlspecialchars($post['author']);?></b>
