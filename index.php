@@ -20,6 +20,13 @@ $posts = [
         'avatar'    => 'userpic.jpg'
     ],
     [
+        'title'     => 'Пишем первую функцию',
+        'type'      => 'text',
+        'content'   => 'Чтобы карточки оставались компактными и не занимали слишком много места размер содержимого надо принудительно ограничивать. Для фотографий и видео это можно сделать через CSS, для цитат и ссылок есть ограничение длины при создании поста. Остаётся текстовый контент. Его длина никак не ограничивается в момент создания, а так как пользователи могут писать очень длинные тексты, необходимо предусмотреть обрезание текста до приемлемой длины при показе карточки поста на странице популярного.',
+        'author'    => 'Владик',
+        'avatar'    => 'userpic.jpg'
+    ],
+    [
         'title'     => 'Наконец, обработал фотки!',
         'type'      => 'photo',
         'content'   => 'rock-medium.jpg',
@@ -41,6 +48,32 @@ $posts = [
         'avatar'    => 'userpic.jpg'
     ]
 ];
+
+define('MAX_TEXT_LENGTH', 300);
+
+/**
+ * @param $text текст который необходимо обрезать
+ * @param $letters_num максимальное число символов которое необходимо оставить без учета пробелов
+ * @return string возвращает часть исходной строки, добавляя в конец "..."
+ */
+function cut_text( $text, $letters_num = MAX_TEXT_LENGTH) {
+    $words = explode(' ', $text);
+    $length = 0;
+
+    foreach ($words as $word) {
+        $length += strlen($word);
+
+        if ($length <= $letters_num) {
+            $short_text[] = $word;
+        } else {
+            break;
+        }
+    }
+
+    $text = implode(' ', $short_text) . '...';
+
+    return $text;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -293,7 +326,14 @@ $posts = [
                             </div>
                         <!--текст-->
                         <?php else : ?>
+                            <?php if (strlen($post['content']) > MAX_TEXT_LENGTH): ?>
+                            <p><?=htmlspecialchars(cut_text($post['content']));?></p>
+                            <div class="post-text__more-link-wrapper">
+                                <a class="post-text__more-link" href="#">Читать далее</a>
+                            </div>
+                            <?php else: ?>
                             <p><?=htmlspecialchars($post['content']);?></p>
+                            <?php endif;?>
                         <?php endif; ?>
                     </div>
                     <footer class="post__footer">
