@@ -1,4 +1,6 @@
 <?php
+    require_once 'helpers.php';
+
     define('MAX_TEXT_LENGTH', 300);
 
     /**
@@ -24,4 +26,40 @@
         $text = implode(' ', $short_text) . '...';
 
         return $text;
+    }
+
+
+    /**
+     * @param $date случайную дату в формате «ГГГГ-ММ-ДД ЧЧ: ММ: СС»
+     * @return string возвращает пройденное время к текущему моменту в относительном формате
+     */
+    function elapsed_time($date) {
+        $now_date = date_create('now');
+        $post_date = date_create($date);
+
+        $diff = date_diff($now_date, $post_date);
+
+        $diff->w = floor($diff->d / 7);
+        $diff->d -= $diff->w * 7;
+
+        $periods = [
+            'y' => ['год','года','лет'],
+            'm' => ['месяц','месяца','месяцев'],
+            'w' => ['неделя','недели','недель'],
+            'd' => ['день','дня','дней'],
+            'h' => ['час','часа','часов'],
+            'i' => ['минута','минуты','минут'],
+            's' => ['секунда','секунды','секунд']
+        ];
+
+        foreach ($periods as $key => $period) {
+            if ($diff->$key) {
+                $period = get_noun_plural_form($diff->$key, $period['0'], $period['1'], $period['2']);
+                $passed_time = $diff->$key . ' ' . $period . ' назад';
+            } else {
+                unset($periods[$key]);
+            }
+        }
+
+        return $passed_time;
     }
