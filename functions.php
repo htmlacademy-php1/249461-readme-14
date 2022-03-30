@@ -8,7 +8,7 @@
      * @param $letters_num максимальное число символов которое необходимо оставить без учета пробелов
      * @return string возвращает часть исходной строки, добавляя в конец "..."
      */
-    function cut_text($text, $letters_num = MAX_TEXT_LENGTH)
+    function cut_text(string $text, int $letters_num = MAX_TEXT_LENGTH): string
     {
         $words = explode(' ', $text);
         $length = 0;
@@ -30,10 +30,11 @@
 
 
     /**
-     * @param $date случайную дату в формате «ГГГГ-ММ-ДД ЧЧ: ММ: СС»
-     * @return string возвращает пройденное время к текущему моменту в относительном формате
+     * @param $date случайная дата в формате «ГГГГ-ММ-ДД ЧЧ: ММ: СС»
+     * @return string пройденное время к текущему моменту в относительном формате
      */
-    function elapsed_time($date) {
+    function elapsed_time(string $date): string
+    {
         $now_date = date_create('now');
         $post_date = date_create($date);
 
@@ -43,21 +44,21 @@
         $diff->d -= $diff->w * 7;
 
         $periods = [
-            'y' => ['год','года','лет'],
-            'm' => ['месяц','месяца','месяцев'],
-            'w' => ['неделя','недели','недель'],
-            'd' => ['день','дня','дней'],
-            'h' => ['час','часа','часов'],
-            'i' => ['минута','минуты','минут'],
-            's' => ['секунда','секунды','секунд']
+            'y' => ['год', 'года', 'лет'],
+            'm' => ['месяц', 'месяца', 'месяцев'],
+            'w' => ['неделя', 'недели', 'недель'],
+            'd' => ['день', 'дня', 'дней'],
+            'h' => ['час', 'часа', 'часов'],
+            'i' => ['минута', 'минуты', 'минут'],
+            's' => ['секунда', 'секунды', 'секунд']
         ];
+
+        $passed_time = '';
 
         foreach ($periods as $key => $period) {
             if ($diff->$key) {
                 $period = get_noun_plural_form($diff->$key, $period['0'], $period['1'], $period['2']);
                 $passed_time = $diff->$key . ' ' . $period . ' назад';
-            } else {
-                unset($periods[$key]);
             }
         }
 
