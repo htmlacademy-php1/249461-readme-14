@@ -152,7 +152,14 @@
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"><?=htmlspecialchars($post['author']);?></b>
-                                <time class="post__time" datetime="">дата</time>
+                                <?php
+                                    $current_post_date = generate_random_date($post['id']);
+                                ?>
+                                <time class="post__time"
+                                      datetime="<?=$current_post_date;?>"
+                                      title="<?= date('d.m.Y H:i', strtotime($current_post_date))?>">
+                                    <?=elapsed_time($current_post_date);?>
+                                </time>
                             </div>
                         </a>
                     </div>
