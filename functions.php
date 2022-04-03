@@ -59,6 +59,8 @@
             if ($diff->$key) {
                 $period = get_noun_plural_form($diff->$key, $period['0'], $period['1'], $period['2']);
                 $passed_time = $diff->$key . ' ' . $period . ' назад';
+
+                break;
             }
         }
 
