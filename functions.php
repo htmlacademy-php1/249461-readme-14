@@ -66,3 +66,19 @@
 
         return $passed_time;
     }
+
+    /**
+     * @param $db_connect
+     * @param $sql
+     * @return array|void
+     */
+    function getDbData($db_connect, $sql) {
+        $result = mysqli_query($db_connect, $sql);
+
+        if (!$result) {
+            print ("Ошибка базы данных" . mysqli_error());
+            die();
+        }
+
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }

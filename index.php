@@ -1,7 +1,6 @@
 <?php
     require_once 'helpers.php';
     require_once 'functions.php';
-    //require_once 'data.php';
 
     date_default_timezone_set("Europe/Kiev");
 
@@ -11,42 +10,27 @@
     $user_name = 'Сергей Кравцов';
 
     /* Database */
-    $db = [
-        'host' => 'localhost',
-        'user' => 'root',
-        'password' => '',
-        'database' => 'readme'
-    ];
-
-    /* Database connect and charset */
-    $db_connect = mysqli_connect($db['host'], $db['user'], $db['password'], $db['database']);
+    $config = require_once __DIR__ . '/config.php';
+    $db_connect = mysqli_connect($config['db']['host'], $config['db']['user'], $config['db']['password'], $config['db']['database']);
     mysqli_set_charset($db_connect, 'utf8');
 
-    if ($db_connect) {
-        $sql = 'SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video, p.link, p.views, u.login, u.avatar, t.class
+    if (!$db_connect) {
+        print ("Ошибка подключения базы данных" . mysqli_connect_error());
+        die();
+    }
+
+    /* запрос постов */
+    $sql_posts = 'SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video, p.link, p.views, u.login, u.avatar, t.class
                   FROM posts p
                   JOIN users u ON u.id = p.post_author
                   JOIN types t ON t.id = p.post_type
                   ORDER BY views DESC';
-        $result = mysqli_query($db_connect, $sql);
 
-        if ($result) {
-            $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        } else {
-            $error = mysqli_error($db_connect);
-            print ("Ошибка базы данных" . $error);
-        }
+    /* запрос категорий постов */
+    $sql_types = 'SELECT * FROM types';
 
-        $sql = 'SELECT * FROM types';
-        $result = mysqli_query($db_connect, $sql);
-
-        if ($result) {
-            $post_types = mysqli_fetch_all($result, MYSQLI_ASSOC);
-        } else {
-            $error = mysqli_error($db_connect);
-            print ("Ошибка базы данных" . $error);
-        }
-    }
+    $post_types = getDbData($db_connect, $sql_types);
+    $posts = getDbData($db_connect, $sql_posts);
 
     $content = include_template('main.php', [
         'posts' => $posts,
