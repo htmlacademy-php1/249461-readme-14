@@ -59,8 +59,26 @@
             if ($diff->$key) {
                 $period = get_noun_plural_form($diff->$key, $period['0'], $period['1'], $period['2']);
                 $passed_time = $diff->$key . ' ' . $period . ' назад';
+
+                break;
             }
         }
 
         return $passed_time;
+    }
+
+    /**
+     * @param $db_connect
+     * @param $sql
+     * @return array|void
+     */
+    function getDbData($db_connect, $sql) {
+        $result = mysqli_query($db_connect, $sql);
+
+        if (!$result) {
+            print ("Ошибка базы данных" . mysqli_error());
+            die();
+        }
+
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
