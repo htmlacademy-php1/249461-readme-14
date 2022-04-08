@@ -1,6 +1,9 @@
 <?php
     require_once 'helpers.php';
 
+    /**
+     * Максимальная длина превью поста
+     */
     define('MAX_TEXT_LENGTH', 300);
 
     /**
@@ -67,13 +70,23 @@
         return $passed_time;
     }
 
+
     /**
-     * @param $db_connect
-     * @param $sql
-     * @return array|void
+     * Получение массива записей из базы.
+     * @param $db_connect ресурс соединиея с БД
+     * @param $sql запрос данных
+     * @param $data если нужна выборка по условию
+     * @return array|void Массив записей или ошибку.
      */
-    function getDbData($db_connect, $sql) {
-        $result = mysqli_query($db_connect, $sql);
+    function getDbData($db_connect, $sql, $data = []) {
+        if (empty($data)) {
+            $result = mysqli_query($db_connect, $sql);
+        } else {
+            $stmt = mysqli_prepare($db_connect, $sql);
+            mysqli_stmt_bind_param($stmt, 'i', $data);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+        }
 
         if (!$result) {
             print ("Ошибка базы данных" . mysqli_error());
@@ -81,4 +94,37 @@
         }
 
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    /**
+     * Получение 1 записи на основе id
+     * @param $db_connect ресурс соединиея с БД
+     * @param $sql код запроса
+     * @param $data id для выборки
+     * @return array|false|string[]|void|null
+     */
+    function getDbSingleRow ($db_connect, $sql, $data) {
+        $stmt = mysqli_prepare($db_connect, $sql);
+        mysqli_stmt_bind_param($stmt, 'i', $data);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if (!$result) {
+            print ("Ошибка базы данных" . mysqli_error());
+            die();
+        }
+
+        return mysqli_fetch_assoc($result);
+    }
+
+    /**
+     * Подсчет кол-ва записей в таблице
+     * @param $db_connect ресурс соединиея с БД
+     * @param $table_name Название таблицы в которой нужно посчитать
+     * @return int|string Кол-во записей
+     */
+    function countDbTableRows($db_connect, $table_name) {
+        $sql = "SELECT id FROM $table_name";
+        $result = mysqli_query($db_connect, $sql);
+        return mysqli_num_rows($result);
     }
