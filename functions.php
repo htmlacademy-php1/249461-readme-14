@@ -97,34 +97,12 @@
     }
 
     /**
-     * Получение 1 записи на основе id
-     * @param $db_connect ресурс соединиея с БД
-     * @param $sql код запроса
-     * @param $data id для выборки
-     * @return array|false|string[]|void|null
-     */
-    function getDbSingleRow ($db_connect, $sql, $data) {
-        $stmt = mysqli_prepare($db_connect, $sql);
-        mysqli_stmt_bind_param($stmt, 'i', $data);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if (!$result) {
-            print ("Ошибка базы данных" . mysqli_error());
-            die();
-        }
-
-        return mysqli_fetch_assoc($result);
-    }
-
-    /**
-     * Подсчет кол-ва записей в таблице
-     * @param $db_connect ресурс соединиея с БД
-     * @param $table_name Название таблицы в которой нужно посчитать
-     * @return int|string Кол-во записей
+     * @param $db_connect ресурс соединение с базой
+     * @param $table_name название таблицы
+     * @return array|false Массив, где 1 элемент содержит кол-во строк или ошибка
      */
     function countDbTableRows($db_connect, $table_name) {
-        $sql = "SELECT id FROM $table_name";
+        $sql = "SELECT COUNT(id) FROM $table_name";
         $result = mysqli_query($db_connect, $sql);
-        return mysqli_num_rows($result);
+        return mysqli_fetch_array($result);
     }
