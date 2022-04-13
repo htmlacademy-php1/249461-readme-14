@@ -1,6 +1,10 @@
 <?php
     require_once 'helpers.php';
 
+    /* Temporary */
+    $is_auth = rand(1, 1);
+    $user_name = 'Сергей Кравцов';
+
     /**
      * Максимальная длина превью поста
      */
@@ -49,7 +53,7 @@
         $periods = [
             'y' => ['год', 'года', 'лет'],
             'm' => ['месяц', 'месяца', 'месяцев'],
-            'w' => ['неделя', 'недели', 'недель'],
+            'w' => ['неделю', 'недели', 'недель'],
             'd' => ['день', 'дня', 'дней'],
             'h' => ['час', 'часа', 'часов'],
             'i' => ['минута', 'минуты', 'минут'],
@@ -78,18 +82,14 @@
      * @param $data если нужна выборка по условию
      * @return array|void Массив записей или ошибку.
      */
-    function getDbData($db_connect, $sql, $data = []) {
-        if (empty($data)) {
-            $result = mysqli_query($db_connect, $sql);
-        } else {
-            $stmt = mysqli_prepare($db_connect, $sql);
-            mysqli_stmt_bind_param($stmt, 'i', $data);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-        }
+    function get_db_data($db_connect, $sql, $data = []) {
+        $stmt = db_get_prepare_stmt($db_connect, $sql, $data);
 
-        if (!$result) {
-            print ("Ошибка базы данных" . mysqli_error());
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result === false) {
+            print ("Ошибка базы данных" . mysqli_stmt_error($stmt));
             die();
         }
 
@@ -97,12 +97,26 @@
     }
 
     /**
-     * @param $db_connect ресурс соединение с базой
-     * @param $table_name название таблицы
-     * @return array|false Массив, где 1 элемент содержит кол-во строк или ошибка
+     * @param $db_connect ресурс соединения с БД
+     * @param $column колонка для подсчета
+     * @param $table таблица в которой ведется подсчет
+     * @param $sort_column колонка для выборки по ключу
+     * @param $sort_key ключ для выборки
+     * @return mixed|string ошибка БД или кол-во записей
      */
-    function countDbTableRows($db_connect, $table_name) {
-        $sql = "SELECT COUNT(id) FROM $table_name";
-        $result = mysqli_query($db_connect, $sql);
-        return mysqli_fetch_array($result);
+    function count_lines_db_table($db_connect, $column, $table, $sort_column = '', $sort_key = '') {
+        $ids = [];
+
+        $sql = "SELECT COUNT($column) FROM $table";
+
+        if ($sort_key != '') {
+            $ids[] = $sort_key;
+            $sql = "SELECT COUNT($column) FROM $table WHERE $sort_column = ?";
+        }
+        $stmt = db_get_prepare_stmt($db_connect, $sql, $ids);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        $counter = mysqli_fetch_assoc($result);
+        return $counter["COUNT($column)"];
     }

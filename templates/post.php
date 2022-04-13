@@ -1,12 +1,12 @@
 <main class="page__main page__main--publication">
     <div class="container">
-        <h1 class="page__title page__title--publication"><?=$post['title'];?></h1>
+        <h1 class="page__title page__title--publication"><?= $post['title'] ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper post-photo">
                 <div class="post-details__main-block post post--details">
 
-                    <?=$post_content;?>
+                    <?= $post_content ?>
 
                     <div class="post__indicators">
                         <div class="post__buttons">
@@ -14,10 +14,11 @@
                                 <svg class="post__indicator-icon" width="20" height="17">
                                     <use xlink:href="#icon-heart"></use>
                                 </svg>
-                                <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
+                                <svg class="post__indicator-icon post__indicator-icon--like-active" width="20"
+                                     height="17">
                                     <use xlink:href="#icon-heart-active"></use>
                                 </svg>
-                                <span>250</span>
+                                <span><?= htmlspecialchars($post['likes']) ?></span>
                                 <span class="visually-hidden">количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
@@ -35,15 +36,14 @@
                                 <span class="visually-hidden">количество репостов</span>
                             </a>
                         </div>
-                        <span class="post__view">500 просмотров</span>
+                        <span class="post__view">
+                            <?= htmlspecialchars($post['views']) . ' ' . get_noun_plural_form(htmlspecialchars($post['views']), 'просмотр','просмотра','просмотров') ?>
+                        </span>
                     </div>
                     <ul class="post__tags">
-                        <li><a href="#">#nature</a></li>
-                        <li><a href="#">#globe</a></li>
-                        <li><a href="#">#photooftheday</a></li>
-                        <li><a href="#">#canon</a></li>
-                        <li><a href="#">#landscape</a></li>
-                        <li><a href="#">#щикарныйвид</a></li>
+                        <?php foreach ($tags as $tag) : ?>
+                            <li><a href="#"><?= htmlspecialchars($tag['hashtag']) ?></a></li>
+                        <?php endforeach ?>
                     </ul>
                     <div class="comments">
                         <form class="comments__form form" action="#" method="post">
@@ -51,7 +51,8 @@
                                 <img class="comments__picture" src="img/userpic-medium.jpg" alt="Аватар пользователя">
                             </div>
                             <div class="form__input-section form__input-section--error">
-                                <textarea class="comments__textarea form__textarea form__input" placeholder="Ваш комментарий"></textarea>
+                                <textarea class="comments__textarea form__textarea form__input"
+                                          placeholder="Ваш комментарий"></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <button class="form__error-button button" type="button">!</button>
                                 <div class="form__error-text">
@@ -66,7 +67,8 @@
                                 <li class="comments__item user">
                                     <div class="comments__avatar">
                                         <a class="user__avatar-link" href="#">
-                                            <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
+                                            <img class="comments__picture" src="img/userpic-larisa.jpg"
+                                                 alt="Аватар пользователя">
                                         </a>
                                     </div>
                                     <div class="comments__info">
@@ -84,7 +86,8 @@
                                 <li class="comments__item user">
                                     <div class="comments__avatar">
                                         <a class="user__avatar-link" href="#">
-                                            <img class="comments__picture" src="img/userpic-larisa.jpg" alt="Аватар пользователя">
+                                            <img class="comments__picture" src="img/userpic-larisa.jpg"
+                                                 alt="Аватар пользователя">
                                         </a>
                                     </div>
                                     <div class="comments__info">
@@ -95,7 +98,12 @@
                                             <time class="comments__time" datetime="2019-03-18">2 дня назад</time>
                                         </div>
                                         <p class="comments__text">
-                                            Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих упряжках.
+                                            Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской
+                                            границы. Байкал считается самым глубоким озером в мире. Он окружен сетью
+                                            пешеходных маршрутов, называемых Большой байкальской тропой. Деревня
+                                            Листвянка, расположенная на западном берегу озера, – популярная отправная
+                                            точка для летних экскурсий. Зимой здесь можно кататься на коньках и собачьих
+                                            упряжках.
                                         </p>
                                     </div>
                                 </li>
@@ -111,28 +119,39 @@
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link" href="#">
-                                <img class="post-details__picture user__picture" src="img/<?=$post['avatar']?>" alt="Аватар пользователя">
+                                <img class="post-details__picture user__picture" src="img/<?= $author['avatar'] ?>"
+                                     alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
                             <a class="post-details__name user__name" href="#">
-                                <span><?=htmlspecialchars($post['login']);?></span>
+                                <span><?= htmlspecialchars($author['login']) ?></span>
                             </a>
-                            <time class="post-details__time user__time" datetime="2014-03-20">5 лет на сайте</time>
+                            <time class="post__time"
+                                  datetime="<?= $author['reg_date'] ?>"
+                                  title="<?= date('d.m.Y H:i', strtotime($author['reg_date'])) ?>">
+                                <?= elapsed_time($author['reg_date']) ?>
+                            </time>
                         </div>
                     </div>
                     <div class="post-details__rating user__rating">
                         <p class="post-details__rating-item user__rating-item user__rating-item--subscribers">
-                            <span class="post-details__rating-amount user__rating-amount">1856</span>
-                            <span class="post-details__rating-text user__rating-text">подписчиков</span>
+                            <span class="post-details__rating-amount user__rating-amount"><?=htmlspecialchars($author['followers'])?></span>
+                            <span class="post-details__rating-text user__rating-text">
+                                <?=get_noun_plural_form(htmlspecialchars($author['counter_posts']), 'подписчик','подписчика','подписчиков')?>
+                            </span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
-                            <span class="post-details__rating-amount user__rating-amount">556</span>
-                            <span class="post-details__rating-text user__rating-text">публикаций</span>
+                            <span class="post-details__rating-amount user__rating-amount"><?=htmlspecialchars($author['counter_posts'])?></span>
+                            <span class="post-details__rating-text user__rating-text">
+                                <?=get_noun_plural_form(htmlspecialchars($author['counter_posts']), 'публикация','публикации','публикаций')?>
+                            </span>
                         </p>
                     </div>
                     <div class="post-details__user-buttons user__buttons">
-                        <button class="user__button user__button--subscription button button--main" type="button">Подписаться</button>
+                        <button class="user__button user__button--subscription button button--main" type="button">
+                            Подписаться
+                        </button>
                         <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
                     </div>
                 </div>
