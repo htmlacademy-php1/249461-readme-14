@@ -50,7 +50,7 @@ VALUES ('#photooftheday'),
        ('#щикарныйвид'),
        ('#landscape'),
        ('#сериал'),
-       ('№курсы');
+       ('#курсы');
 
 INSERT INTO has_posts (hashtag, post)
 VALUES ('1', '4'),

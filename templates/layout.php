@@ -40,7 +40,7 @@
                 <nav class="header__nav">
                     <ul class="header__my-nav">
                         <li class="header__my-page header__my-page--popular">
-                            <a class="header__page-link header__page-link--active" title="Популярный контент">
+                            <a href="index.php" class="header__page-link header__page-link--active" title="Популярный контент">
                                 <span class="visually-hidden">Популярный контент</span>
                             </a>
                         </li>
@@ -111,9 +111,7 @@
     </div>
 </header>
 
-<section class="page__main page__main--popular">
-    <?=$content;?>
-</section>
+<?=$content;?>
 
 <footer class="footer">
     <div class="footer__wrapper">
