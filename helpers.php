@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -13,12 +14,11 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date): bool
-{
+function is_date_valid(string $date): bool {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    return $dateTimeObj!==false && array_sum(date_get_last_errors())===0;
 }
 
 /**
@@ -30,11 +30,10 @@ function is_date_valid(string $date): bool
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = [])
-{
+function db_get_prepare_stmt($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
 
-    if ($stmt === false) {
+    if ($stmt===false) {
         $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
         die($errorMsg);
     }
@@ -100,9 +99,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string
-{
-    $number = (int)$number;
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string {
+    $number = (int) $number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -113,7 +111,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
         case ($mod10 > 5):
             return $many;
 
-        case ($mod10 === 1):
+        case ($mod10===1):
             return $one;
 
         case ($mod10 >= 2 && $mod10 <= 4):
@@ -130,8 +128,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = [])
-{
+function include_template($name, array $data = []) {
     $name = 'templates/' . $name;
     $result = '';
 
@@ -154,11 +151,11 @@ function include_template($name, array $data = [])
  *
  * @return string Ошибку если валидация не прошла
  */
-function check_youtube_url($url)
-{
+function check_youtube_url($url) {
     $id = extract_youtube_id($url);
 
-    set_error_handler(function () {}, E_WARNING);
+    set_error_handler(function () {
+    }, E_WARNING);
     $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
     restore_error_handler();
 
@@ -166,9 +163,9 @@ function check_youtube_url($url)
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
-    $err_flag = strpos($headers[0], '200') ? 200 : 404;
+    $err_flag = strpos($headers[0], '200') ? 200:404;
 
-    if ($err_flag !== 200) {
+    if ($err_flag!==200) {
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
@@ -180,8 +177,7 @@ function check_youtube_url($url)
  * @param string $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_video($youtube_url)
-{
+function embed_youtube_video($youtube_url) {
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -198,8 +194,7 @@ function embed_youtube_video($youtube_url)
  * @param string|null $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_cover(string $youtube_url = null)
-{
+function embed_youtube_cover(string $youtube_url = null) {
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -216,18 +211,17 @@ function embed_youtube_cover(string $youtube_url = null)
  * @param string $youtube_url Ссылка на youtube видео
  * @return array
  */
-function extract_youtube_id($youtube_url)
-{
+function extract_youtube_id($youtube_url) {
     $id = false;
 
     $parts = parse_url($youtube_url);
 
     if ($parts) {
-        if ($parts['path'] == '/watch') {
+        if ($parts['path']=='/watch') {
             parse_str($parts['query'], $vars);
             $id = $vars['v'] ?? null;
         } else {
-            if ($parts['host'] == 'youtu.be') {
+            if ($parts['host']=='youtu.be') {
                 $id = substr($parts['path'], 1);
             }
         }
@@ -240,8 +234,7 @@ function extract_youtube_id($youtube_url)
  * @param $index
  * @return false|string
  */
-function generate_random_date($index)
-{
+function generate_random_date($index) {
     $deltas = [['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11]];
     $dcnt = count($deltas);
 
