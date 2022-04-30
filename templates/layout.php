@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=$title;?></title>
+    <title>readme: <?=$title;?></title>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="page">
@@ -102,7 +102,7 @@
                             </div>
                         </li>
                         <li>
-                            <a class="header__post-button button button--transparent" href="adding-post.html">Пост</a>
+                            <a class="header__post-button button button--transparent" href="add.php">Пост</a>
                         </li>
                     </ul>
                 </nav>
@@ -167,8 +167,8 @@
         </div>
     </div>
 </footer>
-<script src="libs/dropzone.js"></script>
+<!--<script src="libs/dropzone.js"></script>
 <script src="js/dropzone-settings.js"></script>
-<script src="js/main.js"></script>
+<script src="js/main.js"></script>-->
 </body>
 </html>

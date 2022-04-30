@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>readme: авторизация</title>
-    <link rel="stylesheet" href="css/main.css">
+    <title>readme: страница результатов поиска (нет результатов)</title>
+    <link rel="stylesheet" href="../css/main.css">
   </head>
   <body class="page">
     <div style="display: none">
@@ -16,7 +16,7 @@
       <div class="header__wrapper container">
         <div class="header__logo-wrapper">
           <a class="header__logo-link" href="main.html">
-            <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+            <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
           </a>
           <p class="header__topic">
             micro blogging
@@ -54,11 +54,49 @@
               </li>
             </ul>
             <ul class="header__user-nav">
-              <li class="header__authorization">
-                <a class="header__user-button header__user-button--active header__authorization-button button">Вход</a>
+              <li class="header__profile">
+                <a class="header__profile-link" href="#">
+                  <div class="header__avatar-wrapper">
+                    <img class="header__profile-avatar" src="../img/userpic-medium.jpg" alt="Аватар профиля">
+                  </div>
+                  <div class="header__profile-name">
+                    <span>Антон Глуханько</span>
+                    <svg class="header__link-arrow" width="10" height="6">
+                      <use xlink:href="#icon-arrow-right-ad"></use>
+                    </svg>
+                  </div>
+                </a>
+                <div class="header__tooltip-wrapper">
+                  <div class="header__profile-tooltip">
+                    <ul class="header__profile-nav">
+                      <li class="header__profile-nav-item">
+                        <a class="header__profile-nav-link" href="#">
+                          <span class="header__profile-nav-text">
+                            Мой профиль
+                          </span>
+                        </a>
+                      </li>
+                      <li class="header__profile-nav-item">
+                        <a class="header__profile-nav-link" href="#">
+                          <span class="header__profile-nav-text">
+                            Сообщения
+                            <i class="header__profile-indicator">2</i>
+                          </span>
+                        </a>
+                      </li>
+                      <li class="header__profile-nav-item">
+                        <a class="header__profile-nav-link" href="#">
+                          <span class="header__profile-nav-text">
+                            Выход
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </li>
               <li>
-                <a class="header__user-button header__register-button button">Регистрация</a>
+                <a class="header__post-button button button--transparent" href="adding-post.html">Пост</a>
               </li>
             </ul>
           </nav>
@@ -66,37 +104,28 @@
       </div>
     </header>
 
-    <main class="page__main page__main--login">
-      <div class="container">
-        <h1 class="page__title page__title--login">Вход</h1>
-      </div>
-      <section class="login container">
-        <h2 class="visually-hidden">Форма авторизации</h2>
-        <form class="login__form form" action="#" method="post">
-          <div class="login__input-wrapper form__input-wrapper">
-            <label class="login__label form__label" for="login-email">Электронная почта</label>
-            <div class="form__input-section">
-              <input class="login__input form__input" id="login-email" type="email" name="email" placeholder="Укажите эл.почту">
-              <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-              <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-              </div>
+    <main class="page__main page__main--search-results">
+      <h1 class="visually-hidden">Страница результатов поиска (нет результатов)</h1>
+      <section class="search">
+        <h2 class="visually-hidden">Результаты поиска</h2>
+        <div class="search__query-wrapper">
+          <div class="search__query container">
+            <span>Вы искали:</span>
+            <span class="search__query-text">#photooftheday</span>
+          </div>
+        </div>
+        <div class="search__results-wrapper">
+          <div class="search__no-results container">
+            <p class="search__no-results-info">К сожалению, ничего не найдено.</p>
+            <p class="search__no-results-desc">
+              Попробуйте изменить поисковый запрос или просто зайти в раздел &laquo;Популярное&raquo;, там живет самый крутой контент.
+            </p>
+            <div class="search__links">
+              <a class="search__popular-link button button--main" href="#">Популярное</a>
+              <a class="search__back-link" href="#">Вернуться назад</a>
             </div>
           </div>
-          <div class="login__input-wrapper form__input-wrapper">
-            <label class="login__label form__label" for="login-password">Пароль</label>
-            <div class="form__input-section">
-              <input class="login__input form__input" id="login-password" type="password" name="password" placeholder="Введите пароль">
-              <button class="form__error-button button button--main" type="button">!<span class="visually-hidden">Информация об ошибке</span></button>
-              <div class="form__error-text">
-                <h3 class="form__error-title">Заголовок сообщения</h3>
-                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не так.</p>
-              </div>
-            </div>
-          </div>
-          <button class="login__submit button button--main" type="submit">Отправить</button>
-        </form>
+        </div>
       </section>
     </main>
 
@@ -143,7 +172,7 @@
               </li>
             </ul>
             <div class="footer__copyright">
-              <a class="footer__copyright-link" href="#">
+              <a class="footer__copyright-link" href="https://htmlacademy.ru">
                 <span>Разработано HTML Academy</span>
                 <svg class="footer__copyright-logo" width="27" height="34">
                   <use xlink:href="#icon-htmlacademy"></use>
@@ -154,5 +183,7 @@
         </div>
       </div>
     </footer>
+
+    <script src="js/main.js"></script>
   </body>
 </html>

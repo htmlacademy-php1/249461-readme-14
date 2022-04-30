@@ -44,8 +44,7 @@
                     </li>
                     <?php foreach ($types as $type): ?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?=htmlspecialchars($type['class'])?>
-                            <?= htmlspecialchars($type['id']) === (int)$post_category ? 'filters__button--active' : ''; ?>
+                        <a class="filters__button filters__button--<?=htmlspecialchars($type['class'])?> <?= htmlspecialchars($type['id']) === $post_category ? 'filters__button--active' : '' ?>
                          button" href="<?=$script_path?>?type=<?=htmlspecialchars($type['id'])?>">
                             <span class="visually-hidden"><?=htmlspecialchars($type['title'])?></span>
                             <svg class="filters__icon" width="22" height="18">
@@ -72,7 +71,7 @@
                         <div class="post__author">
                             <a class="post__author-link" href="#" title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <img class="post__author-avatar" src="img/<?=$post['avatar']?>" alt="Аватар пользователя">
+                                    <img class="post__author-avatar" src="<?=$post['avatar']?>" alt="Аватар пользователя">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?=htmlspecialchars($post['login'])?></b>
