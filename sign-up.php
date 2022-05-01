@@ -7,7 +7,7 @@ require_once 'db_connect.php';
 $is_auth = 0;
 $title = 'Регистрация';
 
-if ($_SERVER['REQUEST_METHOD']=='POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_user = $_POST;
 
     $validation_rules = [
@@ -32,10 +32,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             'title' => $title,
             'errors' => $errors
         ]);
-    } else {
+    }
+
+    if (empty($errors)) {
         unset($new_user['password_repeat']);
         $new_user['user_pass'] = generate_password_hash($new_user['user_pass']);
-        $new_user['avatar'] = upload_img($new_user['avatar']);
+        $new_user['avatar'] = $new_user['avatar'] ? upload_img($new_user['avatar']) : null;
 
         $sql = "INSERT INTO users (reg_date, email, login, user_pass, avatar) VALUES (NOW(), ?, ?, ?, ?)";
         $stmt = db_get_prepare_stmt($db_connect, $sql, $new_user);
@@ -45,7 +47,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
             header("Location: index.php");
         }
     }
-} else {
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $content = include_template('sign-up.php', [
             'title' => $title
     ]);
