@@ -106,13 +106,7 @@ function get_db_data(mysqli $db_connect, string $sql, array $data = [])
  * @param string $sort_key Ключ для выборки
  * @return mixed|string Ошибка БД или кол-во записей
  */
-function count_lines_db_table(
-        mysqli $db_connect,
-        string $column,
-        string $table,
-        string $sort_column = '',
-        string $sort_key = ''
-) {
+function count_lines_db_table(mysqli $db_connect, string $column, string $table, string $sort_column = '', string $sort_key = '') {
     $ids = [];
 
     $sql = "SELECT COUNT($column) FROM $table";
@@ -266,6 +260,10 @@ function validate_video(array $input_array, string $field, $db_connect)
 
 function validate_img_type(array $input_array, string $field, $db_connect)
 {
+    if (empty($input_array[$field])) {
+        return null;
+    }
+
     $valid_formats = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
     if (!$input_array[$field]) {
         return null;
@@ -285,6 +283,10 @@ function validate_img_type(array $input_array, string $field, $db_connect)
 
 function validate_img_size(array $input_array, string $field, $db_connect)
 {
+    if (empty($input_array[$field])) {
+        return null;
+    }
+
     $size = $input_array[$field]['size'];
     $max_size = 1024 * 1024 * 2; // 2097152 = 2Мб
     if ($size > $max_size) {
@@ -331,7 +333,6 @@ function upload_img(array $image)
     $image_name = $image['name'];
     $file_name = hash('sha256', $image_name);
     $image_format = pathinfo($image_name, PATHINFO_EXTENSION);
-    var_dump($file_name . '.' . $image_format);
 
     $new_file_name = $file_name . '.' . $image_format;
 
@@ -400,4 +401,34 @@ function add_post_tags($input_array, $db_connect, $post_id)
     }
 
     return $res;
+}
+
+function validate_email(array $input_array, string $field, $db_connect) {
+    if (!filter_var($input_array[$field], FILTER_VALIDATE_EMAIL)) {
+        return 'Укажите корректный email';
+    }
+    return null;
+}
+
+function validate_unique(array $inputArray, string $field, $db_connection, $column, $table, $sort_column): ?string
+{
+    if (!isset($inputArray[$field])) {
+        return null;
+    }
+    $counter = count_lines_db_table($db_connection, $column, $table, $sort_column, $inputArray[$field]);
+
+    return $counter === 0 ? null : 'Данное значение уже присутствует в базе';
+
+}
+
+function validate_password(array $input_array, string $field, $db_connect, string $field2) {
+    if ($input_array[$field] !== $input_array[$field2]) {
+        return 'Пароли не совпадают';
+    }
+
+    return null;
+}
+
+function generate_password_hash($value) {
+    return password_hash($value, PASSWORD_BCRYPT);
 }
