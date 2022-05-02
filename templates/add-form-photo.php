@@ -62,9 +62,9 @@
                 </svg>
             </button>-->
         </div>
-        <div class="adding-post__file adding-post__file--photo form__file dropzone-previews">
+        <!--<div class="adding-post__file adding-post__file--photo form__file dropzone-previews">
 
-        </div>
+        </div>-->
     </div>
     <div class="adding-post__buttons">
         <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>
