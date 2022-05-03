@@ -4,71 +4,55 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 
-date_default_timezone_set("Europe/Kiev");
+session_start();
 
-$title = 'популярное';
+$title = 'блог, каким он должен быть';
 
-$filters = [];
+if (isset($_SESSION['user'])) {
+    header("Location: /feed.php");
+}
 
-if (!$db_connect) {
-    print ("Ошибка подключения базы данных" . mysqli_connect_error());
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $layout_content = include_template('sign-in.php', [
+            'title' => $title
+    ]);
+    print($layout_content);
     die();
 }
 
-/* запрос постов */
-$sql_posts = 'SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video, p.link, p.views, u.login, u.avatar, t.class
-              FROM posts p
-              JOIN users u ON u.id = p.post_author
-              JOIN types t ON t.id = p.post_type
-              ORDER BY views DESC
-              LIMIT 9';
+$validation_rules = [
+    'login' => ['required', 'email', 'login'],
+    'password' => ['required'],
+];
 
-/* запрос категорий постов */
-$sql_types = 'SELECT * FROM types';
+$errors = validate($_POST ?? [], $validation_rules, $db_connect);
 
-$post_types = get_db_data($db_connect, $sql_types);
-$posts = get_db_data($db_connect, $sql_posts);
+if (count($errors)) {
+    $layout_content = include_template('sign-in.php', [
+            'title' => $title,
+            'errors' => $errors
+    ]);
 
-$script_path = pathinfo(__FILE__, PATHINFO_BASENAME);
-$post_category = filter_input(INPUT_GET, 'type', FILTER_SANITIZE_NUMBER_INT);
-
-if (isset($post_category)) {
-    $filters['category'] = $post_category;
-
-    $sql_posts = "SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video, p.link, p.views, u.login, u.avatar, t.class
-                  FROM posts p
-                  JOIN users u ON u.id = p.post_author
-                  JOIN types t ON t.id = p.post_type
-                  WHERE post_type = ?
-                  ORDER BY views DESC
-                  LIMIT 9";
-
-    $posts = get_db_data($db_connect, $sql_posts, $filters);
+    print($layout_content);
+    die();
 }
 
-foreach ($posts as $key => $post) {
-    $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $post['id']);
-    $posts[$key] = $post;
+$user['login'] = $_POST['login'];
+$sql = "SELECT * FROM users WHERE email = ?";
+$current_user = get_db_data($db_connect, $sql, $user)[0];
+
+if (!password_verify($_POST['password'], $current_user['user_pass'])) {
+    $errors['password'] = 'Указан неверный пароль';
+    $layout_content = include_template('sign-in.php', [
+            'title' => $title,
+            'errors' => $errors
+    ]);
+
+    print($layout_content);
+    die();
 }
 
-function get_post_content($class, $post) {
-    $post_content = include_template("main-post-$class.php", ['post' => $post]);
-    print $post_content;
-}
+$_SESSION['user'] = $current_user;
+header("Location: /feed.php");
 
-$content = include_template('main.php', [
-        'posts' => $posts,
-        'types' => $post_types,
-        'script_path' => $script_path,
-        'post_category' => $post_category
-]);
-
-$layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'is_auth' => $is_auth,
-        'user_name' => $user_name
-]);
-
-print($layout_content);
 
