@@ -57,7 +57,7 @@ function get_post_content($class, $post) {
     print $post_content;
 }
 
-$content = include_template('main.php', [
+$content = include_template('popular.php', [
         'title' => $title,
         'posts' => $posts,
         'types' => $post_types,

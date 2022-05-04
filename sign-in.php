@@ -6,14 +6,19 @@ require_once 'db_connect.php';
 
 session_start();
 
-$title = 'блог, каким он должен быть';
+$title = 'Вход';
 
 if (isset($_SESSION['user'])) {
     header("Location: /feed.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    $layout_content = include_template('guest.php', [
+    $content = include_template('sign-in.php', [
+            'title' => $title
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
             'title' => $title
     ]);
 
@@ -22,16 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $validation_rules = [
-    'login' => ['required', 'email', 'login'],
-    'password' => ['required'],
+        'login' => ['required', 'email', 'login'],
+        'password' => ['required'],
 ];
 
 $errors = validate($_POST ?? [], $validation_rules, $db_connect);
 
 if (count($errors)) {
-    $layout_content = include_template('guest.php', [
+    $content = include_template('sign-in.php', [
             'title' => $title,
             'errors' => $errors
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => $title
     ]);
 
     print($layout_content);
@@ -44,9 +54,14 @@ $current_user = get_db_data($db_connect, $sql, $user)[0];
 
 if (!password_verify($_POST['password'], $current_user['user_pass'])) {
     $errors['password'] = 'Указан неверный пароль';
-    $layout_content = include_template('guest.php', [
+    $content = include_template('sign-in.php', [
             'title' => $title,
             'errors' => $errors
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => $title
     ]);
 
     print($layout_content);
