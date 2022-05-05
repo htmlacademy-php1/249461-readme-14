@@ -3,9 +3,9 @@
 require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
+require_once 'session.php';
 
 $title = 'Пост';
-
 $post_ids = [];
 
 $posts_count = count_lines_db_table($db_connect, 'id', 'posts');
@@ -23,7 +23,15 @@ $sql = "SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video
                   WHERE p.id = ?";
 
 $post_ids[] = $current_post;
+
+if (!get_db_data($db_connect, $sql, $post_ids)) {
+    print "Запись не найдена. Указан неверный или несуществующий id";
+    header('HTTP/1.1 404 Not Found', true, 404);
+    die();
+}
+
 $post = get_db_data($db_connect, $sql, $post_ids)[0];
+
 /* Лайки */
 $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $current_post);
 
@@ -53,8 +61,7 @@ $content = include_template('post.php', [
 $layout_content = include_template('layout.php', [
         'content' => $content,
         'title' => $title,
-        'is_auth' => $is_auth,
-        'user_name' => $user_name
+        'current_user' => $current_user
 ]);
 
 print($layout_content);

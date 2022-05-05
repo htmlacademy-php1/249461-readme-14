@@ -2,10 +2,6 @@
 
 require_once 'helpers.php';
 
-/* Temporary */
-$is_auth = rand(1, 1);
-$user_name = 'Сергей Кравцов';
-
 /**
  * Максимальная длина превью поста
  */
@@ -157,6 +153,14 @@ function get_post_type_class(int $id, array $types)
 }
 
 
+/**
+ * Основная функция валидации полей
+ * @param array $input_array Массив полей из формы
+ * @param array $validation_rules ассоциативный массив с правилами валидации
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return array Массив ошибок если они есть
+ * @throws Exception Если указана несуществующая функция проверки
+ */
 function validate(array $input_array, array $validation_rules, $db_connect): array
 {
     // Объявим массив ошибок, который в итоге вернем в ответ.
@@ -191,6 +195,13 @@ function validate(array $input_array, array $validation_rules, $db_connect): arr
     return array_filter($errors);
 }
 
+/**
+ * Проверка обязательного поля для заполнения
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_required(array $input_array, string $field, $db_connect)
 {
     if (empty($input_array[$field])) {
@@ -200,7 +211,16 @@ function validate_required(array $input_array, string $field, $db_connect)
     return null;
 }
 
-function validate_length(array $input_array, string $field, $db_connect, $min, $max)
+/**
+ * Проверка значения на длину
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @param int $min Минимальная длина текста
+ * @param int $max Максимальная длинна текста
+ * @return string|null Текст ошибки, или ничего
+ */
+function validate_length(array $input_array, string $field, $db_connect, int $min, int $max)
 {
     if ($input_array[$field]) {
         $len = strlen($input_array[$field]);
@@ -212,6 +232,13 @@ function validate_length(array $input_array, string $field, $db_connect, $min, $
     return null;
 }
 
+/**
+ * Функция проверки тега
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_tags(array $input_array, string $field, $db_connect)
 {
     if (empty($input_array[$field])) {
@@ -228,6 +255,13 @@ function validate_tags(array $input_array, string $field, $db_connect)
     return null;
 }
 
+/**
+ * Проверка значения, что оно является правильной ссылкой
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_link(array $input_array, string $field, $db_connect)
 {
     if (!filter_var($input_array[$field], FILTER_VALIDATE_URL)) {
@@ -236,6 +270,13 @@ function validate_link(array $input_array, string $field, $db_connect)
     return null;
 }
 
+/**
+ * Проверка значения, что ссылка ведет на видео youtube, и оно доступно
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_video(array $input_array, string $field, $db_connect)
 {
     $id = extract_youtube_id($input_array[$field]);
@@ -258,6 +299,13 @@ function validate_video(array $input_array, string $field, $db_connect)
     return null;
 }
 
+/**
+ * Проверка расширения изображения
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_img_type(array $input_array, string $field, $db_connect)
 {
     if (empty($input_array[$field])) {
@@ -281,6 +329,13 @@ function validate_img_type(array $input_array, string $field, $db_connect)
     return "Неверный формат изображения.";
 }
 
+/**
+ * Проверка изображения, что оно не превышает максимальный размер в 2Мб
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_img_size(array $input_array, string $field, $db_connect)
 {
     if (empty($input_array[$field])) {
@@ -295,6 +350,11 @@ function validate_img_size(array $input_array, string $field, $db_connect)
     return null;
 }
 
+/**
+ * Получает расширение файла по ссылке на него
+ * @param string $url Ссылка на удаленный файл
+ * @return mixed|null
+ */
 function get_remote_mime_type($url)
 {
     $url = filter_var($url, FILTER_VALIDATE_URL);
@@ -310,6 +370,12 @@ function get_remote_mime_type($url)
     return curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 }
 
+/**
+ * Проверка, что файл по ссылке является картинкой
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @return string|null Текст ошибки, или ничего
+ */
 function validate_url_content(array $input_array, string $field): ?string
 {
     if (empty($input_array[$field])) {
@@ -325,8 +391,9 @@ function validate_url_content(array $input_array, string $field): ?string
 
 
 /**
- * @param array $image Массив с данными загруженного файла
- * @return mixed Путь к файлу
+ * Функция загрузки изображения полученного из формы от пользователя
+ * @param array $image Массив с данными загруженного изображения
+ * @return mixed Путь к сохраненного изображения
  */
 function upload_img(array $image)
 {
@@ -349,6 +416,11 @@ function upload_img(array $image)
     return $image_url;
 }
 
+/**
+ * Функция загрузки изображения по ссылке полученной от пользователя
+ * @param string $link Ссылка на изображение
+ * @return string Ссылку на сохранное изображение
+ */
 function download_img_from_link($link) {
     $img = file_get_contents($link);
     $img_format = '.' . end(explode('.', $link));
@@ -365,9 +437,15 @@ function download_img_from_link($link) {
     return $image_url;
 }
 
-function add_post_tags($input_array, $db_connect, $post_id)
+/**
+ * @param string $input Строка с тегами
+ * @param $db_connect Подключение к базе
+ * @param int $post_id Идентификатор поста к которому необходимо добавить теги
+ * @return bool|null
+ */
+function add_post_tags(string $input, $db_connect, int $post_id)
 {
-    if (empty($input_array)) {
+    if (empty($input)) {
         return null;
     }
 
@@ -403,6 +481,13 @@ function add_post_tags($input_array, $db_connect, $post_id)
     return $res;
 }
 
+/**
+ * Проверяет на корректность email
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки или ничего
+ */
 function validate_email(array $input_array, string $field, $db_connect) {
     if (!filter_var($input_array[$field], FILTER_VALIDATE_EMAIL)) {
         return 'Укажите корректный email';
@@ -410,7 +495,17 @@ function validate_email(array $input_array, string $field, $db_connect) {
     return null;
 }
 
-function validate_unique(array $inputArray, string $field, $db_connection, $column, $table, $sort_column): ?string
+/**
+ * Проверка на уникальность указанного значения
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @param string $column Колонка в которой необходимо проверить значение
+ * @param string $table Таблица в которой проверяем
+ * @param string $sort_column Колнка по которой будет искать
+ * @return string|null Ошибка если значение уже существует.
+ */
+function validate_unique(array $inputArray, string $field, $db_connection, string $column, string $table, string $sort_column): ?string
 {
     if (!isset($inputArray[$field])) {
         return null;
@@ -421,6 +516,14 @@ function validate_unique(array $inputArray, string $field, $db_connection, $colu
 
 }
 
+/**
+ * Функция сравнения введенных паролей при регистрации.
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @param string $field2 Второе поле для ввода пароля
+ * @return string|null Ошибка если значения не совпадают.
+ */
 function validate_password(array $input_array, string $field, $db_connect, string $field2) {
     if ($input_array[$field] !== $input_array[$field2]) {
         return 'Пароли не совпадают';
@@ -429,6 +532,36 @@ function validate_password(array $input_array, string $field, $db_connect, strin
     return null;
 }
 
-function generate_password_hash($value) {
+/**
+ * Функция генерации хэша для указаного значения
+ * @param string $value Введенное значение
+ * @return string Сгенерированный хэш
+ */
+function generate_password_hash(string $value) {
     return password_hash($value, PASSWORD_BCRYPT);
+}
+
+/**
+ * Проверка существование логина
+ * @param array $input_array Массив полей из формы
+ * @param string $field Имя поля, которое необходимо проверить
+ * @param mysqli $db_connect Данные соединения с базой
+ * @return string|null Текст ошибки или ничего
+ */
+function validate_login(array $input_array, string $field, $db_connect) {
+    $user = [];
+    if (!isset($input_array[$field])) {
+        return null;
+    }
+
+    $user['login'] = $input_array[$field];
+    $sql = "SELECT * FROM users WHERE email = ?";
+
+    $current_user = get_db_data($db_connect, $sql, $user);
+
+    if (empty($current_user)) {
+        return 'Пользователь с таким email не найден';
+    }
+
+    return null;
 }
