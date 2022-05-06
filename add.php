@@ -3,14 +3,9 @@
 require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
+require_once 'session.php';
 
 $title = 'Добавить публикацию';
-
-/* Временно случайный пользователь из существующих */
-function get_rand_user()
-{
-    return rand(1, 3);
-}
 
 $sql_types = 'SELECT * FROM types';
 $post_types = get_db_data($db_connect, $sql_types);
@@ -35,7 +30,7 @@ if (isset($_GET['type']) && !in_array($_GET['type'], $id_types)) {
     $current_type_class = '';
 }
 
-$add_form = include_template("add-form-${current_type_class}.php", ['type_id' => $current_type_id]);
+$add_form = include_template("add-forms/add-form-${current_type_class}.php", ['type_id' => $current_type_id]);
 
 if ($_SERVER['REQUEST_METHOD']=='POST') {
     $new_post = $_POST;
@@ -111,10 +106,10 @@ if ($_SERVER['REQUEST_METHOD']=='POST') {
     }
 
     if (count($errors)) {
-        $add_form = include_template("add-form-${current_type_class}.php",
+        $add_form = include_template("add-forms/add-form-${current_type_class}.php",
                 ['errors' => $errors]);
     } else {
-        $new_post['post_author'] = get_rand_user();
+        $new_post['post_author'] = $current_user['id'];
         $post_tags = $new_post['tags'];
 
         unset($new_post['tags']);
@@ -141,8 +136,7 @@ $content = include_template('adding-post.php', [
 $layout_content = include_template('layout.php', [
         'content' => $content,
         'title' => $title,
-        'is_auth' => $is_auth,
-        'user_name' => $user_name
+        'current_user' => $current_user
 ]);
 
 print($layout_content);

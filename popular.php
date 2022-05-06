@@ -42,7 +42,7 @@ if (isset($post_category)) {
                   JOIN types t ON t.id = p.post_type
                   WHERE post_type = ?
                   ORDER BY views DESC
-                  LIMIT 9";
+                  LIMIT 90";
 
     $posts = get_db_data($db_connect, $sql_posts, $filters);
 }
@@ -53,7 +53,7 @@ foreach ($posts as $key => $post) {
 }
 
 function get_post_content($class, $post) {
-    $post_content = include_template("main-post-$class.php", ['post' => $post]);
+    $post_content = include_template("popular-post/popular-post-$class.php", ['post' => $post]);
     print $post_content;
 }
 

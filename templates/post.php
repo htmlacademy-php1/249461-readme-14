@@ -42,7 +42,7 @@
                     </div>
                     <ul class="post__tags">
                         <?php foreach ($tags as $tag) : ?>
-                            <li><a href="#"><?= htmlspecialchars($tag['hashtag']) ?></a></li>
+                            <li><a href="search.php?search=<?= $tag['id'] ?>"><?= htmlspecialchars($tag['hashtag']) ?></a></li>
                         <?php endforeach ?>
                     </ul>
                     <div class="comments">
@@ -119,8 +119,9 @@
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link" href="#">
-                                <img class="post-details__picture user__picture" src="<?= $author['avatar'] ?>"
-                                     alt="Аватар пользователя">
+                                <?php if ($author['avatar']) : ?>
+                                    <img class="post-details__picture user__picture" src="<?=$author['avatar']?>" alt="Аватар пользователя">
+                                <?php endif;?>
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
