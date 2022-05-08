@@ -5,7 +5,22 @@ require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
 
-mysqli_query($db_connect, 'CREATE FULLTEXT INDEX hashtag_search ON hashtags(hashtag)');
+function no_search_results($query, $current_user) {
+    $title = 'Страница результатов поиска (нет результатов)';
+    $content = include_template('search-no-results.php', [
+            'title' => $title,
+            'query' => $query
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => $title,
+            'current_user' => $current_user
+    ]);
+
+    print($layout_content);
+    die();
+}
 
 $query = $_GET['search'] ?? '';
 
@@ -84,23 +99,3 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-
-
-
-function no_search_results($query, $current_user) {
-    $title = 'Страница результатов поиска (нет результатов)';
-    $content = include_template('search-no-results.php', [
-            'title' => $title,
-            'query' => $query
-    ]);
-
-    $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'current_user' => $current_user
-    ]);
-
-    print($layout_content);
-    die();
-}

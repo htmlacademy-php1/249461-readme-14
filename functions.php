@@ -573,3 +573,25 @@ function validate_login(array $input_array, string $field, $db_connect) {
 
     return null;
 }
+
+/**
+ * @param string $query Поисковый запрос
+ * @param array $current_user Массив с данными о текущем пользователе
+ * @return void
+ */
+function no_search_results(string $query, array $current_user) {
+    $title = 'Страница результатов поиска (нет результатов)';
+    $content = include_template('search-no-results.php', [
+            'title' => $title,
+            'query' => $query
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => $title,
+            'current_user' => $current_user
+    ]);
+
+    print($layout_content);
+    die();
+}
