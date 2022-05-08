@@ -41,6 +41,8 @@ if (!empty($query) && substr($query, 0, 1)==='#') {
         $posts_id[] = $post['post'];
     }
 
+    krsort($posts_id);
+
     $sql_post = "SELECT p.id, p.dt_add, p.title, p.text, p.quote_author, p.image, p.video, p.link, p.views, u.login, u.avatar, t.class
                   FROM posts p
                   JOIN users u ON u.id = p.post_author
