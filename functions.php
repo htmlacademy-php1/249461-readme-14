@@ -119,7 +119,6 @@ function count_lines_db_table(mysqli $db_connect, string $column, string $table,
     return $counter["COUNT($column)"];
 }
 
-/* Temporary */
 /**
  * Функция получения значений из POST запроса.
  * @param string $name Input[name] из которого необходимо получить значение
@@ -128,6 +127,15 @@ function count_lines_db_table(mysqli $db_connect, string $column, string $table,
 function get_post_val(string $name)
 {
     return filter_input(INPUT_POST, $name);
+}
+/**
+ * Функция получения значений из POST запроса.
+ * @param string $name Input[name] из которого необходимо получить значение
+ * @return string Возвращает строку, введенную пользователем, если форма отправлена с ошибкой.
+ */
+function get_get_val(string $name)
+{
+    return filter_input(INPUT_GET, $name);
 }
 
 /**
@@ -449,7 +457,7 @@ function add_post_tags(string $input, $db_connect, int $post_id)
         return null;
     }
 
-    $tags = explode(' ', trim($input_array, ' '));
+    $tags = explode(' ', trim($input, ' '));
     $tags_ids = [];
 
     foreach ($tags as $key => $tag) {
@@ -564,4 +572,26 @@ function validate_login(array $input_array, string $field, $db_connect) {
     }
 
     return null;
+}
+
+/**
+ * @param string $query Поисковый запрос
+ * @param array $current_user Массив с данными о текущем пользователе
+ * @return void
+ */
+function no_search_results(string $query, array $current_user) {
+    $title = 'Страница результатов поиска (нет результатов)';
+    $content = include_template('search-no-results.php', [
+            'title' => $title,
+            'query' => $query
+    ]);
+
+    $layout_content = include_template('layout.php', [
+            'content' => $content,
+            'title' => $title,
+            'current_user' => $current_user
+    ]);
+
+    print($layout_content);
+    die();
 }

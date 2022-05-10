@@ -196,6 +196,8 @@ CREATE TABLE IF NOT EXISTS `readme`.`hashtags` (
     UNIQUE INDEX `id_UNIQUE` (`id` ASC))
     ENGINE = InnoDB;
 
+CREATE FULLTEXT INDEX hashtag_search ON hashtags(hashtag);
+
 
 -- -----------------------------------------------------
 -- Table `readme`.`has_posts`

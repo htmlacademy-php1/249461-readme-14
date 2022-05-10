@@ -71,7 +71,9 @@
                         <div class="post__author">
                             <a class="post__author-link" href="#" title="Автор">
                                 <div class="post__avatar-wrapper">
+                                    <?php if ($post['avatar']) : ?>
                                     <img class="post__author-avatar" src="<?=$post['avatar']?>" alt="Аватар пользователя">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?=htmlspecialchars($post['login'])?></b>

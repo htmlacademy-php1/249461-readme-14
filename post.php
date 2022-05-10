@@ -49,7 +49,7 @@ $sql_tags = "SELECT h.hashtag FROM has_posts hp
                 WHERE post = ?";
 $tags = get_db_data($db_connect, $sql_tags, $post_ids);
 
-$post_content = include_template("post-${post['class']}.php", ['post' => $post]);
+$post_content = include_template("single-post/post-${post['class']}.php", ['post' => $post]);
 
 $content = include_template('post.php', [
         'post' => $post,
