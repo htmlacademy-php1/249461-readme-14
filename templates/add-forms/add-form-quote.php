@@ -8,7 +8,7 @@
                         class="form__input-required">*</span></label>
                 <div class="form__input-section">
                     <input class="adding-post__input form__input" id="quote-heading" type="text" name="title"
-                           placeholder="Введите заголовок">
+                           placeholder="Введите заголовок" value="<?=get_post_val('title')?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
@@ -21,7 +21,7 @@
                         class="form__input-required">*</span></label>
                 <div class="form__input-section">
                     <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" name="text"
-                        id="cite-text" placeholder="Текст цитаты"></textarea>
+                        id="cite-text" placeholder="Текст цитаты"><?=get_post_val('text')?></textarea>
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">
@@ -33,7 +33,7 @@
                 <label class="adding-post__label form__label" for="quote-author">Автор <span
                         class="form__input-required">*</span></label>
                 <div class="form__input-section">
-                    <input class="adding-post__input form__input" id="quote-author" type="text" name="quote_author" placeholder="Автор цитаты">
+                    <input class="adding-post__input form__input" id="quote-author" type="text" name="quote_author" placeholder="Автор цитаты"  value="<?=get_post_val('quote_author')?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
                     <div class="form__error-text">

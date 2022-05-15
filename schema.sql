@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS `readme`.`comments` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `readme`.`likes` (
     `id` INT NOT NULL AUTO_INCREMENT,
+    `dt_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `author` INT NOT NULL,
     `post` INT NOT NULL,
     PRIMARY KEY (`id`),

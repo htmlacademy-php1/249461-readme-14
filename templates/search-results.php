@@ -33,7 +33,7 @@
                         <div class="post__main">
                             <h2><a href="post.php?id=<?=htmlspecialchars($post['id'])?>"><?=htmlspecialchars($post['title'])?></a></h2>
 
-                            <?php get_post_content($post['class'], $post) ?>
+                            <?php get_post_content("feed/", $post['class'], $post) ?>
 
                         </div>
                         <footer class="post__footer post__indicators">

@@ -1,7 +1,8 @@
+/*Hash for password 11111111 */
 INSERT INTO users (email, login, user_pass, avatar)
-VALUES ('larisa@readme.loc', 'Лариса', '111111', 'img/userpic-larisa-small.jpg'),
-       ('vladik@readme.loc', 'Владик', '111111', 'img/userpic.jpg'),
-       ('viktor@readme.loc', 'Виктор', '111111', 'img/userpic-mark.jpg');
+VALUES ('larisa@readme.loc', 'Лариса', '$2y$10$QdAYLT9w7Ho3uJDDGW5vQO.YsGbAEU/HgpuP8HvV1XExXId9bAJDG', 'img/userpic-larisa-small.jpg'),
+       ('vladik@readme.loc', 'Владик', '$2y$10$QdAYLT9w7Ho3uJDDGW5vQO.YsGbAEU/HgpuP8HvV1XExXId9bAJDG', 'img/userpic.jpg'),
+       ('viktor@readme.loc', 'Виктор', '$2y$10$QdAYLT9w7Ho3uJDDGW5vQO.YsGbAEU/HgpuP8HvV1XExXId9bAJDG', 'img/userpic-mark.jpg');
 
 INSERT INTO types (title, class)
 VALUES ('Текст', 'text'),

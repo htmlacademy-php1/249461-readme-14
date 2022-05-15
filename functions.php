@@ -79,8 +79,7 @@ function elapsed_time(string $date): string
  * @param array $data Если нужна выборка по условию
  * @return array|void Массив записей или ошибку.
  */
-function get_db_data(mysqli $db_connect, string $sql, array $data = [])
-{
+function get_db_data(mysqli $db_connect, string $sql, array $data = []) {
     $stmt = db_get_prepare_stmt($db_connect, $sql, $data);
 
     mysqli_stmt_execute($stmt);
@@ -102,7 +101,13 @@ function get_db_data(mysqli $db_connect, string $sql, array $data = [])
  * @param string $sort_key Ключ для выборки
  * @return mixed|string Ошибка БД или кол-во записей
  */
-function count_lines_db_table(mysqli $db_connect, string $column, string $table, string $sort_column = '', string $sort_key = '') {
+function count_lines_db_table(
+        mysqli $db_connect,
+        string $column,
+        string $table,
+        string $sort_column = '',
+        string $sort_key = ''
+) {
     $ids = [];
 
     $sql = "SELECT COUNT($column) FROM $table";
@@ -124,17 +129,16 @@ function count_lines_db_table(mysqli $db_connect, string $column, string $table,
  * @param string $name Input[name] из которого необходимо получить значение
  * @return string Возвращает строку, введенную пользователем, если форма отправлена с ошибкой.
  */
-function get_post_val(string $name)
-{
+function get_post_val(string $name) {
     return filter_input(INPUT_POST, $name);
 }
+
 /**
  * Функция получения значений из POST запроса.
  * @param string $name Input[name] из которого необходимо получить значение
  * @return string Возвращает строку, введенную пользователем, если форма отправлена с ошибкой.
  */
-function get_get_val(string $name)
-{
+function get_get_val(string $name) {
     return filter_input(INPUT_GET, $name);
 }
 
@@ -144,8 +148,7 @@ function get_get_val(string $name)
  * @param array $types Массив типов постов
  * @return mixed|null NULL или класс типа поста
  */
-function get_post_type_class(int $id, array $types)
-{
+function get_post_type_class(int $id, array $types) {
     foreach ($types as $type) {
         if ($type['id']==$id) {
             $type = $type['class'];
@@ -158,6 +161,19 @@ function get_post_type_class(int $id, array $types)
     }
 
     return $type;
+}
+
+
+/**
+ * Функция подгрузки шаблона контента поста
+ * @param string $path Подпапка в темплейтах
+ * @param string $class Строка с типом поста
+ * @param array $post Массив с данными поста
+ * @return void
+ */
+function get_post_content($path, $class, $post) {
+    $post_content = include_template($path . $class . ".php", ['post' => $post]);
+    print $post_content;
 }
 
 
@@ -210,8 +226,7 @@ function validate(array $input_array, array $validation_rules, $db_connect): arr
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_required(array $input_array, string $field, $db_connect)
-{
+function validate_required(array $input_array, string $field, $db_connect) {
     if (empty($input_array[$field])) {
         return 'Поле должно быть заполнено';
     }
@@ -228,10 +243,10 @@ function validate_required(array $input_array, string $field, $db_connect)
  * @param int $max Максимальная длинна текста
  * @return string|null Текст ошибки, или ничего
  */
-function validate_length(array $input_array, string $field, $db_connect, int $min, int $max)
-{
+function validate_length(array $input_array, string $field, $db_connect, int $min, int $max) {
     if ($input_array[$field]) {
-        $len = strlen($input_array[$field]);
+        $len = mb_strlen($input_array[$field]);
+
         if ($len < $min || $len > $max) {
             return "Значение должно быть от $min до $max символов";
         }
@@ -247,8 +262,7 @@ function validate_length(array $input_array, string $field, $db_connect, int $mi
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_tags(array $input_array, string $field, $db_connect)
-{
+function validate_tags(array $input_array, string $field, $db_connect) {
     if (empty($input_array[$field])) {
         return null;
     }
@@ -270,8 +284,7 @@ function validate_tags(array $input_array, string $field, $db_connect)
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_link(array $input_array, string $field, $db_connect)
-{
+function validate_link(array $input_array, string $field, $db_connect) {
     if (!filter_var($input_array[$field], FILTER_VALIDATE_URL)) {
         return 'URL должен быть корректным';
     }
@@ -285,8 +298,7 @@ function validate_link(array $input_array, string $field, $db_connect)
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_video(array $input_array, string $field, $db_connect)
-{
+function validate_video(array $input_array, string $field, $db_connect) {
     $id = extract_youtube_id($input_array[$field]);
 
     set_error_handler(function () {
@@ -314,8 +326,7 @@ function validate_video(array $input_array, string $field, $db_connect)
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_img_type(array $input_array, string $field, $db_connect)
-{
+function validate_img_type(array $input_array, string $field, $db_connect) {
     if (empty($input_array[$field])) {
         return null;
     }
@@ -344,8 +355,7 @@ function validate_img_type(array $input_array, string $field, $db_connect)
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_img_size(array $input_array, string $field, $db_connect)
-{
+function validate_img_size(array $input_array, string $field, $db_connect) {
     if (empty($input_array[$field])) {
         return null;
     }
@@ -363,8 +373,7 @@ function validate_img_size(array $input_array, string $field, $db_connect)
  * @param string $url Ссылка на удаленный файл
  * @return mixed|null
  */
-function get_remote_mime_type($url)
-{
+function get_remote_mime_type($url) {
     $url = filter_var($url, FILTER_VALIDATE_URL);
     if (!$url) {
         return null;
@@ -403,8 +412,7 @@ function validate_url_content(array $input_array, string $field): ?string
  * @param array $image Массив с данными загруженного изображения
  * @return mixed Путь к сохраненного изображения
  */
-function upload_img(array $image)
-{
+function upload_img(array $image) {
     $image_name = $image['name'];
     $file_name = hash('sha256', $image_name);
     $image_format = pathinfo($image_name, PATHINFO_EXTENSION);
@@ -451,8 +459,7 @@ function download_img_from_link($link) {
  * @param int $post_id Идентификатор поста к которому необходимо добавить теги
  * @return bool|null
  */
-function add_post_tags(string $input, $db_connect, int $post_id)
-{
+function add_post_tags(string $input, $db_connect, int $post_id) {
     if (empty($input)) {
         return null;
     }
@@ -513,14 +520,20 @@ function validate_email(array $input_array, string $field, $db_connect) {
  * @param string $sort_column Колнка по которой будет искать
  * @return string|null Ошибка если значение уже существует.
  */
-function validate_unique(array $inputArray, string $field, $db_connection, string $column, string $table, string $sort_column): ?string
-{
+function validate_unique(
+        array $inputArray,
+        string $field,
+        $db_connection,
+        string $column,
+        string $table,
+        string $sort_column
+): ?string {
     if (!isset($inputArray[$field])) {
         return null;
     }
     $counter = count_lines_db_table($db_connection, $column, $table, $sort_column, $inputArray[$field]);
 
-    return $counter === 0 ? null : 'Данное значение уже присутствует в базе';
+    return $counter===0 ? null:'Данное значение уже присутствует в базе';
 
 }
 
@@ -533,7 +546,7 @@ function validate_unique(array $inputArray, string $field, $db_connection, strin
  * @return string|null Ошибка если значения не совпадают.
  */
 function validate_password(array $input_array, string $field, $db_connect, string $field2) {
-    if ($input_array[$field] !== $input_array[$field2]) {
+    if ($input_array[$field]!==$input_array[$field2]) {
         return 'Пароли не совпадают';
     }
 
@@ -575,6 +588,7 @@ function validate_login(array $input_array, string $field, $db_connect) {
 }
 
 /**
+ * Функция отрисовки страницы при отсутствии результатов поиска
  * @param string $query Поисковый запрос
  * @param array $current_user Массив с данными о текущем пользователе
  * @return void
@@ -593,5 +607,43 @@ function no_search_results(string $query, array $current_user) {
     ]);
 
     print($layout_content);
-    die();
+}
+
+/**
+ * Проверка наличия записи в таблице по 2-м параметрам
+ * @param $db_connect
+ * @param int $follower Подписчик
+ * @param int $host На кого подписон
+ * @return bool
+ */
+function check_db_entry($db_connect, $table, $column1, int $def1, $column2, int $def2) {
+    $sql = "SELECT * FROM $table WHERE ($column1 = ? AND $column2 = ?)";
+
+    if (get_db_data($db_connect, $sql, [$def1, $def2])) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Подготовка sql запроса для копирования тегов при репосте поста
+ * @param array $tags Массив id тегов полученых по id ооригинального поста
+ * @param int $post_id ID нового поста
+ * @return string
+ */
+function generate_sql_tags_repost_post(array $tags, int $post_id)
+{
+    foreach ($tags as $key => $value) {
+        $tags[$key] = $value["hashtag"];
+    }
+
+    $sql_insert_tags = "INSERT INTO has_posts (hashtag,post) VALUES";
+
+    foreach ($tags as $tag) {
+        $new_tag = "($tag,$post_id)";
+        $sql_insert_tags .= $new_tag . ",";
+    }
+
+    return trim($sql_insert_tags, ",");
 }

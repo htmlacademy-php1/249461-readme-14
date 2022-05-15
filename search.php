@@ -5,27 +5,11 @@ require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
 
-function no_search_results($query, $current_user) {
-    $title = 'Страница результатов поиска (нет результатов)';
-    $content = include_template('search-no-results.php', [
-            'title' => $title,
-            'query' => $query
-    ]);
-
-    $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'current_user' => $current_user
-    ]);
-
-    print($layout_content);
-    die();
-}
-
 $query = $_GET['search'] ?? '';
 
 if (empty($query)) {
     no_search_results($query, $current_user);
+    die();
 }
 
 if (!empty($query)) {
@@ -44,6 +28,7 @@ if (!empty($query) && substr($query, 0, 1)==='#') {
 
     if (!get_db_data($db_connect, $sql_tag, [$query])) {
         no_search_results($query, $current_user);
+        die();
     }
 
     $hashtag = get_db_data($db_connect, $sql_tag, [$query])[0];
@@ -73,16 +58,12 @@ if (!empty($query) && substr($query, 0, 1)==='#') {
 
 if (empty($posts)) {
     no_search_results($query, $current_user);
+    die();
 }
 
 foreach ($posts as $key => $post) {
     $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $post['id']);
     $posts[$key] = $post;
-}
-
-function get_post_content($class, $post) {
-    $post_content = include_template("feed/feed-$class.php", ['post' => $post]);
-    print $post_content;
 }
 
 $title = 'Страница результатов поиска';

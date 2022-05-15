@@ -8,6 +8,7 @@
                 </div>
                 <div class="post-link__info">
                     <h3><?=htmlspecialchars($post['title']);?></h3>
+                    <span><?=htmlspecialchars($post['link']);?></span>
                 </div>
             </div>
         </a>

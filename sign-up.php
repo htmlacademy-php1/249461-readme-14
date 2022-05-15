@@ -66,7 +66,7 @@ $stmt = db_get_prepare_stmt($db_connect, $sql, $new_user);
 $res = mysqli_stmt_execute($stmt);
 
 if ($res) {
-    header("Location: index.php");
+    header("Location: sign-in.php");
 }
 
 
