@@ -11,14 +11,12 @@ $current_url = $_SERVER['HTTP_REFERER'];
 
 if (!$post_id) {
     header("Location: {$current_url}");
-    print 'ID поста не укзаан';
     die();
 }
 
 $sql_check_post = "SELECT * FROM posts WHERE id = ?";
 if (!get_db_data($db_connect, $sql_check_post, [$post_id])) {
     header("Location: {$current_url}");
-    print 'ID поста не укзаан';
     die();
 }
 
