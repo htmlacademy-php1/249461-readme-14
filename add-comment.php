@@ -22,7 +22,7 @@ if (!get_db_data($db_connect, $sql_check_post, [$post_id])) {
 }
 
 $validation_rules = [
-        'comment' => ['required', 'length:4,2000'],
+    'comment' => ['required', 'length:4,2000'],
 ];
 
 $comment = $_POST;

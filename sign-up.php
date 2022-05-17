@@ -9,13 +9,13 @@ $title = 'Регистрация';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $content = include_template('sign-up.php', [
-            'title' => $title
+        'title' => $title
     ]);
 
     $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'is_auth' => $is_auth
+        'content' => $content,
+        'title' => $title,
+        'is_auth' => $is_auth
     ]);
 
     print($layout_content);
@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $new_user = $_POST;
 
 $validation_rules = [
-        'email' => ['required', 'email', 'unique:email,users,email'],
-        'login' => ['required', 'unique:login,users,login'],
-        'user_pass' => ['required', 'length:8,16', 'password:password_repeat'],
-        'avatar' => ['img_type', 'img_size'],
+    'email' => ['required', 'email', 'unique:email,users,email'],
+    'login' => ['required', 'unique:login,users,login'],
+    'user_pass' => ['required', 'length:8,16', 'password:password_repeat'],
+    'avatar' => ['img_type', 'img_size'],
 ];
 
 if (!empty($_FILES['avatar']['tmp_name'])) {
@@ -43,14 +43,14 @@ if (isset($errors['user_pass'])) {
 
 if (count($errors)) {
     $content = include_template('sign-up.php', [
-            'title' => $title,
-            'errors' => $errors
+        'title' => $title,
+        'errors' => $errors
     ]);
 
     $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'is_auth' => $is_auth
+        'content' => $content,
+        'title' => $title,
+        'is_auth' => $is_auth
     ]);
 
     print($layout_content);

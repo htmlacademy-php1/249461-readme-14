@@ -1,0 +1,13 @@
+{
+    "name": "skravtsov/readme",
+    "description": "microblog",
+    "authors": [
+        {
+            "name": "skravtsov",
+            "email": "s.kravtsov@hotmail.com"
+        }
+    ],
+    "require": {
+        "symfony/mailer": "^6.0"
+    }
+}

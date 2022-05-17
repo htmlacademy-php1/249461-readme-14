@@ -1,7 +1,7 @@
 <!-- пост-цитата -->
 <blockquote>
     <p>
-        <?=htmlspecialchars($post['text'])?>
+        <?= htmlspecialchars($post['text']) ?>
     </p>
-    <cite><?=htmlspecialchars($post['quote_author'])?></cite>
+    <cite><?= htmlspecialchars($post['quote_author']) ?></cite>
 </blockquote>

@@ -7,8 +7,8 @@ require_once 'session.php';
 
 $user = $current_user;
 $subscribe_button = [
-        'class' => 'main',
-        'text' => 'Подписаться'
+    'class' => 'main',
+    'text' => 'Подписаться'
 ];
 
 if (isset($_GET['user'])) {
@@ -28,19 +28,20 @@ $user['counter_posts'] = count_lines_db_table($db_connect, 'id', 'posts', 'post_
 $user['followers'] = count_lines_db_table($db_connect, 'id', 'subscribes', 'host', $user['id']);
 
 $filter_tabs = [
-        'posts' => 'Посты',
-        'likes' => 'Лайки',
-        'subscriptions' => 'Подписки'
+    'posts' => 'Посты',
+    'likes' => 'Лайки',
+    'subscriptions' => 'Подписки'
 ];
 
 $active_tab = $_GET['tab'] ?? 'posts';
 
-function get_origin_post_info($db_connect,$post_id) {
+function get_origin_post_info($db_connect, $post_id)
+{
     $sql = "SELECT p.dt_add, u.login, u.avatar
             FROM posts p
             JOIN users u ON u.id = p.post_author
             WHERE p.id = ?";
-    return get_db_data($db_connect,$sql,[$post_id])[0];
+    return get_db_data($db_connect, $sql, [$post_id])[0];
 }
 
 switch ($active_tab) {
@@ -50,16 +51,18 @@ switch ($active_tab) {
                     JOIN types t ON t.id = p.post_type
                     WHERE post_author = ?
                     ORDER BY dt_add DESC ";
-        $posts = get_db_data($db_connect,$sql_post,[$user['id']]);
+        $posts = get_db_data($db_connect, $sql_post, [$user['id']]);
 
         /* Обработка лайков и тегов для каждого поста */
         foreach ($posts as $key => $post) {
             $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $post['id']);
-            $post['repost_count'] = count_lines_db_table($db_connect, 'origin_post', 'posts', 'origin_post', $post['id']);
-            $post['has_like'] = check_db_entry($db_connect,'likes','author', $current_user['id'],'post', $post['id']);
+            $post['repost_count'] = count_lines_db_table($db_connect, 'origin_post', 'posts', 'origin_post',
+                $post['id']);
+            $post['has_like'] = check_db_entry($db_connect, 'likes', 'author', $current_user['id'], 'post',
+                $post['id']);
 
             if ($post['origin_post']) {
-                $origin_post = get_origin_post_info($db_connect,$post['origin_post']);
+                $origin_post = get_origin_post_info($db_connect, $post['origin_post']);
 
                 $post['origin_date'] = $origin_post['dt_add'];
                 $post['origin_login'] = $origin_post['login'];
@@ -77,7 +80,7 @@ switch ($active_tab) {
 
         /* Контент активной вкладки поста */
         $tab_content = include_template("profile/posts.php", [
-                'posts' => $posts
+            'posts' => $posts
         ]);
 
         break;
@@ -116,8 +119,8 @@ switch ($active_tab) {
 
         /* Контент активной вкладки поста */
         $tab_content = include_template("profile/subscriptions.php", [
-                'subscribes_list' => $subscribes_list,
-                'subscribe_button' => $subscribe_button,
+            'subscribes_list' => $subscribes_list,
+            'subscribe_button' => $subscribe_button,
         ]);
 
         break;
@@ -125,19 +128,19 @@ switch ($active_tab) {
 
 
 $content = include_template('profile.php', [
-        'title' => $title,
-        'user' => $user,
-        'current_user' => $current_user,
-        'subscribe_button' => $subscribe_button,
-        'filter_tabs' => $filter_tabs,
-        'active_tab' => $active_tab,
-        'tab_content' => $tab_content
+    'title' => $title,
+    'user' => $user,
+    'current_user' => $current_user,
+    'subscribe_button' => $subscribe_button,
+    'filter_tabs' => $filter_tabs,
+    'active_tab' => $active_tab,
+    'tab_content' => $tab_content
 ]);
 
 $layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'current_user' => $current_user,
+    'content' => $content,
+    'title' => $title,
+    'current_user' => $current_user,
 ]);
 
 print($layout_content);

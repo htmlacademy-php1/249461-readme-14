@@ -48,13 +48,13 @@ function elapsed_time(string $date): string
     $diff->d -= $diff->w * 7;
 
     $periods = [
-            'y' => ['год', 'года', 'лет'],
-            'm' => ['месяц', 'месяца', 'месяцев'],
-            'w' => ['неделю', 'недели', 'недель'],
-            'd' => ['день', 'дня', 'дней'],
-            'h' => ['час', 'часа', 'часов'],
-            'i' => ['минута', 'минуты', 'минут'],
-            's' => ['секунда', 'секунды', 'секунд']
+        'y' => ['год', 'года', 'лет'],
+        'm' => ['месяц', 'месяца', 'месяцев'],
+        'w' => ['неделю', 'недели', 'недель'],
+        'd' => ['день', 'дня', 'дней'],
+        'h' => ['час', 'часа', 'часов'],
+        'i' => ['минута', 'минуты', 'минут'],
+        's' => ['секунда', 'секунды', 'секунд']
     ];
 
     $passed_time = '';
@@ -79,13 +79,14 @@ function elapsed_time(string $date): string
  * @param array $data Если нужна выборка по условию
  * @return array|void Массив записей или ошибку.
  */
-function get_db_data(mysqli $db_connect, string $sql, array $data = []) {
+function get_db_data(mysqli $db_connect, string $sql, array $data = [])
+{
     $stmt = db_get_prepare_stmt($db_connect, $sql, $data);
 
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    if ($result===false) {
+    if ($result === false) {
         print ("Ошибка базы данных" . mysqli_stmt_error($stmt));
         die();
     }
@@ -102,17 +103,17 @@ function get_db_data(mysqli $db_connect, string $sql, array $data = []) {
  * @return mixed|string Ошибка БД или кол-во записей
  */
 function count_lines_db_table(
-        mysqli $db_connect,
-        string $column,
-        string $table,
-        string $sort_column = '',
-        string $sort_key = ''
+    mysqli $db_connect,
+    string $column,
+    string $table,
+    string $sort_column = '',
+    string $sort_key = ''
 ) {
     $ids = [];
 
     $sql = "SELECT COUNT($column) FROM $table";
 
-    if ($sort_key!='') {
+    if ($sort_key != '') {
         $ids[] = $sort_key;
         $sql = "SELECT COUNT($column) FROM $table WHERE $sort_column = ?";
     }
@@ -129,7 +130,8 @@ function count_lines_db_table(
  * @param string $name Input[name] из которого необходимо получить значение
  * @return string Возвращает строку, введенную пользователем, если форма отправлена с ошибкой.
  */
-function get_post_val(string $name) {
+function get_post_val(string $name)
+{
     return filter_input(INPUT_POST, $name);
 }
 
@@ -138,7 +140,8 @@ function get_post_val(string $name) {
  * @param string $name Input[name] из которого необходимо получить значение
  * @return string Возвращает строку, введенную пользователем, если форма отправлена с ошибкой.
  */
-function get_get_val(string $name) {
+function get_get_val(string $name)
+{
     return filter_input(INPUT_GET, $name);
 }
 
@@ -148,9 +151,10 @@ function get_get_val(string $name) {
  * @param array $types Массив типов постов
  * @return mixed|null NULL или класс типа поста
  */
-function get_post_type_class(int $id, array $types) {
+function get_post_type_class(int $id, array $types)
+{
     foreach ($types as $type) {
-        if ($type['id']==$id) {
+        if ($type['id'] == $id) {
             $type = $type['class'];
             break;
         }
@@ -171,7 +175,8 @@ function get_post_type_class(int $id, array $types) {
  * @param array $post Массив с данными поста
  * @return void
  */
-function get_post_content($path, $class, $post) {
+function get_post_content($path, $class, $post)
+{
     $post_content = include_template($path . $class . ".php", ['post' => $post]);
     print $post_content;
 }
@@ -209,7 +214,7 @@ function validate(array $input_array, array $validation_rules, $db_connect): arr
             }
 
             $errors[$field] = call_user_func_array($rule_name,
-                    array_merge([$input_array, $field, $db_connect], $parameters));
+                array_merge([$input_array, $field, $db_connect], $parameters));
             if (isset($errors[$field])) {
                 break;
             }
@@ -226,7 +231,8 @@ function validate(array $input_array, array $validation_rules, $db_connect): arr
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_required(array $input_array, string $field, $db_connect) {
+function validate_required(array $input_array, string $field, $db_connect)
+{
     if (empty($input_array[$field])) {
         return 'Поле должно быть заполнено';
     }
@@ -243,7 +249,8 @@ function validate_required(array $input_array, string $field, $db_connect) {
  * @param int $max Максимальная длинна текста
  * @return string|null Текст ошибки, или ничего
  */
-function validate_length(array $input_array, string $field, $db_connect, int $min, int $max) {
+function validate_length(array $input_array, string $field, $db_connect, int $min, int $max)
+{
     if ($input_array[$field]) {
         $len = mb_strlen($input_array[$field]);
 
@@ -262,14 +269,15 @@ function validate_length(array $input_array, string $field, $db_connect, int $mi
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_tags(array $input_array, string $field, $db_connect) {
+function validate_tags(array $input_array, string $field, $db_connect)
+{
     if (empty($input_array[$field])) {
         return null;
     }
     $tags = explode(' ', trim($input_array[$field], ' '));
 
     foreach ($tags as $tag) {
-        if (substr($tag, 0, 1)!=='#') {
+        if (substr($tag, 0, 1) !== '#') {
             return 'Каждый тег должен начинаться со знака #';
         }
     }
@@ -284,7 +292,8 @@ function validate_tags(array $input_array, string $field, $db_connect) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_link(array $input_array, string $field, $db_connect) {
+function validate_link(array $input_array, string $field, $db_connect)
+{
     if (!filter_var($input_array[$field], FILTER_VALIDATE_URL)) {
         return 'URL должен быть корректным';
     }
@@ -298,7 +307,8 @@ function validate_link(array $input_array, string $field, $db_connect) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_video(array $input_array, string $field, $db_connect) {
+function validate_video(array $input_array, string $field, $db_connect)
+{
     $id = extract_youtube_id($input_array[$field]);
 
     set_error_handler(function () {
@@ -310,9 +320,9 @@ function validate_video(array $input_array, string $field, $db_connect) {
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
-    $err_flag = strpos($headers[0], '200') ? 200:404;
+    $err_flag = strpos($headers[0], '200') ? 200 : 404;
 
-    if ($err_flag!==200) {
+    if ($err_flag !== 200) {
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
@@ -326,7 +336,8 @@ function validate_video(array $input_array, string $field, $db_connect) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_img_type(array $input_array, string $field, $db_connect) {
+function validate_img_type(array $input_array, string $field, $db_connect)
+{
     if (empty($input_array[$field])) {
         return null;
     }
@@ -340,7 +351,7 @@ function validate_img_type(array $input_array, string $field, $db_connect) {
     $file_type = finfo_file($finfo, $tmp_name);
 
     foreach ($valid_formats as $valid_format) {
-        if ($file_type===$valid_format) {
+        if ($file_type === $valid_format) {
             return null;
         }
     }
@@ -355,7 +366,8 @@ function validate_img_type(array $input_array, string $field, $db_connect) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки, или ничего
  */
-function validate_img_size(array $input_array, string $field, $db_connect) {
+function validate_img_size(array $input_array, string $field, $db_connect)
+{
     if (empty($input_array[$field])) {
         return null;
     }
@@ -373,7 +385,8 @@ function validate_img_size(array $input_array, string $field, $db_connect) {
  * @param string $url Ссылка на удаленный файл
  * @return mixed|null
  */
-function get_remote_mime_type($url) {
+function get_remote_mime_type($url)
+{
     $url = filter_var($url, FILTER_VALIDATE_URL);
     if (!$url) {
         return null;
@@ -412,7 +425,8 @@ function validate_url_content(array $input_array, string $field): ?string
  * @param array $image Массив с данными загруженного изображения
  * @return mixed Путь к сохраненного изображения
  */
-function upload_img(array $image) {
+function upload_img(array $image)
+{
     $image_name = $image['name'];
     $file_name = hash('sha256', $image_name);
     $image_format = pathinfo($image_name, PATHINFO_EXTENSION);
@@ -437,7 +451,8 @@ function upload_img(array $image) {
  * @param string $link Ссылка на изображение
  * @return string Ссылку на сохранное изображение
  */
-function download_img_from_link($link) {
+function download_img_from_link($link)
+{
     $img = file_get_contents($link);
     $img_format = '.' . end(explode('.', $link));
     $img_name = hash('sha256', $img);
@@ -459,7 +474,8 @@ function download_img_from_link($link) {
  * @param int $post_id Идентификатор поста к которому необходимо добавить теги
  * @return bool|null
  */
-function add_post_tags(string $input, $db_connect, int $post_id) {
+function add_post_tags(string $input, $db_connect, int $post_id)
+{
     if (empty($input)) {
         return null;
     }
@@ -503,7 +519,8 @@ function add_post_tags(string $input, $db_connect, int $post_id) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки или ничего
  */
-function validate_email(array $input_array, string $field, $db_connect) {
+function validate_email(array $input_array, string $field, $db_connect)
+{
     if (!filter_var($input_array[$field], FILTER_VALIDATE_EMAIL)) {
         return 'Укажите корректный email';
     }
@@ -521,19 +538,19 @@ function validate_email(array $input_array, string $field, $db_connect) {
  * @return string|null Ошибка если значение уже существует.
  */
 function validate_unique(
-        array $inputArray,
-        string $field,
-        $db_connection,
-        string $column,
-        string $table,
-        string $sort_column
+    array $inputArray,
+    string $field,
+    $db_connection,
+    string $column,
+    string $table,
+    string $sort_column
 ): ?string {
     if (!isset($inputArray[$field])) {
         return null;
     }
     $counter = count_lines_db_table($db_connection, $column, $table, $sort_column, $inputArray[$field]);
 
-    return $counter===0 ? null:'Данное значение уже присутствует в базе';
+    return $counter === 0 ? null : 'Данное значение уже присутствует в базе';
 
 }
 
@@ -545,8 +562,9 @@ function validate_unique(
  * @param string $field2 Второе поле для ввода пароля
  * @return string|null Ошибка если значения не совпадают.
  */
-function validate_password(array $input_array, string $field, $db_connect, string $field2) {
-    if ($input_array[$field]!==$input_array[$field2]) {
+function validate_password(array $input_array, string $field, $db_connect, string $field2)
+{
+    if ($input_array[$field] !== $input_array[$field2]) {
         return 'Пароли не совпадают';
     }
 
@@ -558,7 +576,8 @@ function validate_password(array $input_array, string $field, $db_connect, strin
  * @param string $value Введенное значение
  * @return string Сгенерированный хэш
  */
-function generate_password_hash(string $value) {
+function generate_password_hash(string $value)
+{
     return password_hash($value, PASSWORD_BCRYPT);
 }
 
@@ -569,7 +588,8 @@ function generate_password_hash(string $value) {
  * @param mysqli $db_connect Данные соединения с базой
  * @return string|null Текст ошибки или ничего
  */
-function validate_login(array $input_array, string $field, $db_connect) {
+function validate_login(array $input_array, string $field, $db_connect)
+{
     $user = [];
     if (!isset($input_array[$field])) {
         return null;
@@ -593,17 +613,18 @@ function validate_login(array $input_array, string $field, $db_connect) {
  * @param array $current_user Массив с данными о текущем пользователе
  * @return void
  */
-function no_search_results(string $query, array $current_user) {
+function no_search_results(string $query, array $current_user)
+{
     $title = 'Страница результатов поиска (нет результатов)';
     $content = include_template('search-no-results.php', [
-            'title' => $title,
-            'query' => $query
+        'title' => $title,
+        'query' => $query
     ]);
 
     $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'current_user' => $current_user
+        'content' => $content,
+        'title' => $title,
+        'current_user' => $current_user
     ]);
 
     print($layout_content);
@@ -616,7 +637,8 @@ function no_search_results(string $query, array $current_user) {
  * @param int $host На кого подписон
  * @return bool
  */
-function check_db_entry($db_connect, $table, $column1, int $def1, $column2, int $def2) {
+function check_db_entry($db_connect, $table, $column1, int $def1, $column2, int $def2)
+{
     $sql = "SELECT * FROM $table WHERE ($column1 = ? AND $column2 = ?)";
 
     if (get_db_data($db_connect, $sql, [$def1, $def2])) {

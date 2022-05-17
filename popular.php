@@ -48,7 +48,7 @@ if (isset($post_category)) {
 $show_pagination = false;
 
 $counter_posts = ($post_category)
-    ? count_lines_db_table($db_connect, 'id', 'posts','post_type', $post_category)
+    ? count_lines_db_table($db_connect, 'id', 'posts', 'post_type', $post_category)
     : count_lines_db_table($db_connect, 'id', 'posts');
 
 if ($counter_posts > 6) {
@@ -86,31 +86,32 @@ if ($filters['page'] != '') {
 }
 /* Пагинация + Сортировка */
 
-$posts = ($post_category) ? get_db_data($db_connect, $sql_posts, [$post_category]) : get_db_data($db_connect, $sql_posts);
+$posts = ($post_category) ? get_db_data($db_connect, $sql_posts, [$post_category]) : get_db_data($db_connect,
+    $sql_posts);
 
 foreach ($posts as $key => $post) {
     //$post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $post['id']);
     $post['comments'] = count_lines_db_table($db_connect, 'id', 'comments', 'post', $post['id']);
-    $post['has_like'] = check_db_entry($db_connect,'likes','author', $current_user['id'],'post', $post['id']);
+    $post['has_like'] = check_db_entry($db_connect, 'likes', 'author', $current_user['id'], 'post', $post['id']);
     $posts[$key] = $post;
 }
 
 $content = include_template('popular.php', [
-        'title' => $title,
-        'posts' => $posts,
-        'types' => $post_types,
-        'post_category' => $post_category,
-        'show_pagination' => $show_pagination,
+    'title' => $title,
+    'posts' => $posts,
+    'types' => $post_types,
+    'post_category' => $post_category,
+    'show_pagination' => $show_pagination,
 
-        'filters' => $filters,
-        'pages' => $posts_pages_count
+    'filters' => $filters,
+    'pages' => $posts_pages_count
 ]);
 
 $layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'current_user' => $current_user,
-        'active_page' => $active_page
+    'content' => $content,
+    'title' => $title,
+    'current_user' => $current_user,
+    'active_page' => $active_page
 ]);
 
 print($layout_content);

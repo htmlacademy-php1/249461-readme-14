@@ -39,7 +39,7 @@ $post = get_db_data($db_connect, $sql, [$current_post])[0];
 $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $current_post);
 $post['comments'] = count_lines_db_table($db_connect, 'id', 'comments', 'post', $post['id']);
 $post['repost_count'] = count_lines_db_table($db_connect, 'origin_post', 'posts', 'origin_post', $post['id']);
-$post['has_like'] = check_db_entry($db_connect,'likes','author', $current_user['id'],'post', $current_post);
+$post['has_like'] = check_db_entry($db_connect, 'likes', 'author', $current_user['id'], 'post', $current_post);
 
 /* Данные автора поста */
 $user_id[] = $post['post_author'];
@@ -59,8 +59,8 @@ $post_content = include_template("single-post/post-${post['class']}.php", ['post
 
 /* Кнопка подписаться */
 $subscribe_button = [
-        'class' => 'main',
-        'text' => 'Подписаться'
+    'class' => 'main',
+    'text' => 'Подписаться'
 ];
 
 if (isset($author['id'])) {
@@ -85,21 +85,20 @@ $sql_comments = "SELECT c.dt_add, c.comment, u.id, u.login, u.avatar, c.post
 $comments = get_db_data($db_connect, $sql_comments, [$current_post]);
 
 
-
 $content = include_template('post.php', [
-        'post' => $post,
-        'post_content' => $post_content,
-        'author' => $author,
-        'tags' => $tags,
-        'subscribe_button' => $subscribe_button,
-        'current_user' => $current_user,
-        'comments' => $comments
+    'post' => $post,
+    'post_content' => $post_content,
+    'author' => $author,
+    'tags' => $tags,
+    'subscribe_button' => $subscribe_button,
+    'current_user' => $current_user,
+    'comments' => $comments
 ]);
 
 $layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'current_user' => $current_user
+    'content' => $content,
+    'title' => $title,
+    'current_user' => $current_user
 ]);
 
 print($layout_content);
