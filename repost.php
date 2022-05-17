@@ -8,29 +8,27 @@ require_once 'session.php';
 $post_id = filter_input(INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT);
 
 if (!$post_id) {
-    print "Запись не найдена. Указан неверный id";
     header('HTTP/1.1 404 Not Found', true, 404);
+    print "Запись не найдена. Указан неверный id";
     die();
 }
 
 $sql_origin_post = "SELECT * FROM posts WHERE id = ?";
 
 if (!get_db_data($db_connect, $sql_origin_post, [$post_id])) {
-    print "Запись не найдена. Указан неверный или несуществующий id";
     header('HTTP/1.1 404 Not Found', true, 404);
+    print "Запись не найдена. Указан неверный или несуществующий id";
     die();
 }
 
-/* Исходный пост */
+
 $origin_post = get_db_data($db_connect, $sql_origin_post, [$post_id])[0];
 
-/*Теги поста */
-$sql_tags = "SELECT hashtag FROM has_posts WHERE post = ?";
+$sql_tags = "SELECT hashtag FROM hash_posts WHERE post = ?";
 if (get_db_data($db_connect, $sql_tags, [$post_id])) {
     $post_tags = get_db_data($db_connect, $sql_tags, [$post_id]);
 }
 
-/* Новый пост после репоста*/
 $post = $origin_post;
 
 $post['origin_post'] = $origin_post['id'];
@@ -68,7 +66,6 @@ if ($post_tags) {
     $stmt_tags = db_get_prepare_stmt($db_connect, $sql_insert_tags);
     $result_tags = mysqli_stmt_execute($stmt_tags);
 }
-
 
 if (!$result_post || !$result_tags) {
     mysqli_rollback($db_connect);

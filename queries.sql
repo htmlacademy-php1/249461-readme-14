@@ -53,7 +53,7 @@ VALUES ('#photooftheday'),
        ('#сериал'),
        ('#курсы');
 
-INSERT INTO has_posts (hashtag, post)
+INSERT INTO hash_posts (hashtag, post)
 VALUES ('1', '4'),
        ('2', '4'),
        ('3', '4'),

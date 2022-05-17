@@ -22,8 +22,7 @@ if (!empty($query)) {
     $posts = get_db_data($db_connect, $sql_posts, [$query]);
 }
 
-if (!empty($query) && substr($query, 0, 1)==='#') {
-
+if (!empty($query) && substr($query, 0, 1) === '#') {
     $sql_tag = "SELECT id FROM hashtags WHERE MATCH(hashtag) AGAINST(?)";
 
     if (!get_db_data($db_connect, $sql_tag, [$query])) {
@@ -33,7 +32,7 @@ if (!empty($query) && substr($query, 0, 1)==='#') {
 
     $hashtag = get_db_data($db_connect, $sql_tag, [$query])[0];
 
-    $sql_hashtag_posts = "SELECT post FROM has_posts WHERE hashtag = ?";
+    $sql_hashtag_posts = "SELECT post FROM hash_posts WHERE hashtag = ?";
     $hashtag_posts = get_db_data($db_connect, $sql_hashtag_posts, $hashtag);
 
     $posts_id = [];
@@ -68,15 +67,15 @@ foreach ($posts as $key => $post) {
 
 $title = 'Страница результатов поиска';
 $content = include_template('search-results.php', [
-        'title' => $title,
-        'query' => $query,
-        'posts' => $posts
+    'title' => $title,
+    'query' => $query,
+    'posts' => $posts
 ]);
 
 $layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'current_user' => $current_user
+    'content' => $content,
+    'title' => $title,
+    'current_user' => $current_user
 ]);
 
 print($layout_content);

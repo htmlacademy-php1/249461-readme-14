@@ -201,11 +201,13 @@ CREATE FULLTEXT INDEX hashtag_search ON hashtags(hashtag);
 
 
 -- -----------------------------------------------------
--- Table `readme`.`has_posts`
+-- Table `readme`.`hash_posts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `readme`.`has_posts` (
+CREATE TABLE IF NOT EXISTS `readme`.`hash_posts` (
+    `id` INT NOT NULL AUTO_INCREMENT,
     `hashtag` INT NOT NULL,
     `post` INT NOT NULL,
+    PRIMARY KEY (`id`),
     INDEX `hash_idx` (`hashtag` ASC),
     INDEX `hash_post_idx` (`post` ASC),
     CONSTRAINT `hash`
