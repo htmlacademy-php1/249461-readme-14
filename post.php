@@ -50,7 +50,7 @@ $author['counter_posts'] = count_lines_db_table($db_connect, 'id', 'posts', 'pos
 $author['followers'] = count_lines_db_table($db_connect, 'id', 'subscribes', 'host', $post['post_author']);
 
 /* Хэштеги поста */
-$sql_tags = "SELECT h.hashtag FROM has_posts hp
+$sql_tags = "SELECT h.hashtag FROM hash_posts hp
                 JOIN hashtags h ON h.id = hp.hashtag
                 WHERE post = ?";
 $tags = get_db_data($db_connect, $sql_tags, [$current_post]);

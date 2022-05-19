@@ -33,7 +33,7 @@ if (!empty($query) && substr($query, 0, 1) === '#') {
 
     $hashtag = get_db_data($db_connect, $sql_tag, [$query])[0];
 
-    $sql_hashtag_posts = "SELECT post FROM has_posts WHERE hashtag = ?";
+    $sql_hashtag_posts = "SELECT post FROM hash_posts WHERE hashtag = ?";
     $hashtag_posts = get_db_data($db_connect, $sql_hashtag_posts, $hashtag);
 
     $posts_id = [];

@@ -4,6 +4,7 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
+require_once 'notify.php';
 
 $follower = $current_user['id'];
 $host = $_GET['host'];
@@ -30,6 +31,7 @@ $sql = "INSERT INTO subscribes (follower, host) VALUES (?,?)";
 $stmt = db_get_prepare_stmt($db_connect, $sql, [$follower, $host]);
 $res = mysqli_stmt_execute($stmt);
 if ($res) {
+    email_new_subscriber($db_connect, $host, $follower);
     header("Location: {$current_url}");
 }
 

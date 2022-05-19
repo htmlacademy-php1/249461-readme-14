@@ -70,7 +70,7 @@ switch ($active_tab) {
             }
 
 
-            $sql_tags = "SELECT h.hashtag FROM has_posts hp
+            $sql_tags = "SELECT h.hashtag FROM hash_posts hp
                 JOIN hashtags h ON h.id = hp.hashtag
                 WHERE post = ?";
             $post['tags'] = get_db_data($db_connect, $sql_tags, [$post['id']]);

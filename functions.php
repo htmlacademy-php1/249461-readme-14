@@ -504,7 +504,7 @@ function add_post_tags(string $input, $db_connect, int $post_id)
     }
 
     foreach ($tags_ids as $id) {
-        $sql = "INSERT INTO has_posts (hashtag, post) VALUES (?, ?)";
+        $sql = "INSERT INTO hash_posts (hashtag, post) VALUES (?, ?)";
         $stmt = db_get_prepare_stmt($db_connect, $sql, $id);
         $res = mysqli_stmt_execute($stmt);
     }
@@ -660,7 +660,7 @@ function generate_sql_tags_repost_post(array $tags, int $post_id)
         $tags[$key] = $value["hashtag"];
     }
 
-    $sql_insert_tags = "INSERT INTO has_posts (hashtag,post) VALUES";
+    $sql_insert_tags = "INSERT INTO hash_posts (hashtag,post) VALUES";
 
     foreach ($tags as $tag) {
         $new_tag = "($tag,$post_id)";

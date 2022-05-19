@@ -1,6 +1,10 @@
 {
-    "name": "skravtsov/readme",
-    "description": "microblog",
+    "name": "neksen/readme",
+    "autoload": {
+        "psr-4": {
+            "Neksen\\Readme\\": "src/"
+        }
+    },
     "authors": [
         {
             "name": "skravtsov",
@@ -8,6 +12,7 @@
         }
     ],
     "require": {
-        "symfony/mailer": "^6.0"
+        "symfony/mailer": "^6.0",
+        "symfony/google-mailer": "^6.0"
     }
 }

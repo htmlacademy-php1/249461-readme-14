@@ -25,7 +25,7 @@ if (!get_db_data($db_connect, $sql_origin_post, [$post_id])) {
 $origin_post = get_db_data($db_connect, $sql_origin_post, [$post_id])[0];
 
 /*Теги поста */
-$sql_tags = "SELECT hashtag FROM has_posts WHERE post = ?";
+$sql_tags = "SELECT hashtag FROM hash_posts WHERE post = ?";
 if (get_db_data($db_connect, $sql_tags, [$post_id])) {
     $post_tags = get_db_data($db_connect, $sql_tags, [$post_id]);
 }
