@@ -10,11 +10,12 @@ $title = 'блог, каким он должен быть';
 
 if (isset($_SESSION['user'])) {
     header("Location: /feed.php");
+    die();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $layout_content = include_template('guest.php', [
-            'title' => $title
+        'title' => $title
     ]);
 
     print($layout_content);
@@ -30,8 +31,8 @@ $errors = validate($_POST ?? [], $validation_rules, $db_connect);
 
 if (count($errors)) {
     $layout_content = include_template('guest.php', [
-            'title' => $title,
-            'errors' => $errors
+        'title' => $title,
+        'errors' => $errors
     ]);
 
     print($layout_content);
@@ -45,8 +46,8 @@ $current_user = get_db_data($db_connect, $sql, $user)[0];
 if (!password_verify($_POST['password'], $current_user['user_pass'])) {
     $errors['password'] = 'Указан неверный пароль';
     $layout_content = include_template('guest.php', [
-            'title' => $title,
-            'errors' => $errors
+        'title' => $title,
+        'errors' => $errors
     ]);
 
     print($layout_content);

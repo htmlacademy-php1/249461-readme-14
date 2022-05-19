@@ -4,18 +4,16 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 
-$is_auth = 0;
 $title = 'Регистрация';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $content = include_template('sign-up.php', [
-            'title' => $title
+        'title' => $title
     ]);
 
     $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'is_auth' => $is_auth
+        'content' => $content,
+        'title' => $title
     ]);
 
     print($layout_content);
@@ -25,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $new_user = $_POST;
 
 $validation_rules = [
-        'email' => ['required', 'email', 'unique:email,users,email'],
-        'login' => ['required', 'unique:login,users,login'],
-        'user_pass' => ['required', 'length:8,16', 'password:password_repeat'],
-        'avatar' => ['img_type', 'img_size'],
+    'email' => ['required', 'email', 'unique:email,users,email'],
+    'login' => ['required', 'unique:login,users,login'],
+    'user_pass' => ['required', 'length:8,16', 'password:password_repeat'],
+    'avatar' => ['img_type', 'img_size'],
 ];
 
 if (!empty($_FILES['avatar']['tmp_name'])) {
@@ -43,14 +41,13 @@ if (isset($errors['user_pass'])) {
 
 if (count($errors)) {
     $content = include_template('sign-up.php', [
-            'title' => $title,
-            'errors' => $errors
+        'title' => $title,
+        'errors' => $errors
     ]);
 
     $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'is_auth' => $is_auth
+        'content' => $content,
+        'title' => $title
     ]);
 
     print($layout_content);
@@ -66,7 +63,7 @@ $stmt = db_get_prepare_stmt($db_connect, $sql, $new_user);
 $res = mysqli_stmt_execute($stmt);
 
 if ($res) {
-    header("Location: index.php");
+    header("Location: sign-in.php");
 }
 
 

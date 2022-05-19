@@ -3,7 +3,8 @@
     <div class="form__text-inputs-wrapper">
         <input type="hidden" name="post_type" value="1">
         <div class="form__text-inputs">
-            <div class="adding-post__input-wrapper form__input-wrapper <?= isset($errors['title']) ? 'form__input-section--error' : '' ?>">
+            <div
+                class="adding-post__input-wrapper form__input-wrapper <?= isset($errors['title']) ? 'form__input-section--error' : '' ?>">
                 <label class="adding-post__label form__label" for="text-heading">Заголовок <span
                         class="form__input-required">*</span></label>
                 <div class="form__input-section">
@@ -16,7 +17,8 @@
                     </div>
                 </div>
             </div>
-            <div class="adding-post__textarea-wrapper form__textarea-wrapper <?= isset($errors['text']) ? 'form__input-section--error' : '' ?>">
+            <div
+                class="adding-post__textarea-wrapper form__textarea-wrapper <?= isset($errors['text']) ? 'form__input-section--error' : '' ?>">
                 <label class="adding-post__label form__label" for="post-text">Текст поста <span
                         class="form__input-required">*</span></label>
                 <div class="form__input-section">
@@ -29,7 +31,8 @@
                     </div>
                 </div>
             </div>
-            <div class="adding-post__input-wrapper form__input-wrapper <?= isset($errors['tags']) ? 'form__input-section--error' : '' ?>">
+            <div
+                class="adding-post__input-wrapper form__input-wrapper <?= isset($errors['tags']) ? 'form__input-section--error' : '' ?>">
                 <label class="adding-post__label form__label" for="post-tags">Теги</label>
                 <div class="form__input-section">
                     <input class="adding-post__input form__input" id="post-tags" type="text" name="tags"

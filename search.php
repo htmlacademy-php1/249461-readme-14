@@ -5,27 +5,11 @@ require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
 
-function no_search_results($query, $current_user) {
-    $title = 'Страница результатов поиска (нет результатов)';
-    $content = include_template('search-no-results.php', [
-            'title' => $title,
-            'query' => $query
-    ]);
-
-    $layout_content = include_template('layout.php', [
-            'content' => $content,
-            'title' => $title,
-            'current_user' => $current_user
-    ]);
-
-    print($layout_content);
-    die();
-}
-
 $query = $_GET['search'] ?? '';
 
 if (empty($query)) {
     no_search_results($query, $current_user);
+    die();
 }
 
 if (!empty($query)) {
@@ -38,17 +22,17 @@ if (!empty($query)) {
     $posts = get_db_data($db_connect, $sql_posts, [$query]);
 }
 
-if (!empty($query) && substr($query, 0, 1)==='#') {
-
+if (!empty($query) && substr($query, 0, 1) === '#') {
     $sql_tag = "SELECT id FROM hashtags WHERE MATCH(hashtag) AGAINST(?)";
 
     if (!get_db_data($db_connect, $sql_tag, [$query])) {
         no_search_results($query, $current_user);
+        die();
     }
 
     $hashtag = get_db_data($db_connect, $sql_tag, [$query])[0];
 
-    $sql_hashtag_posts = "SELECT post FROM has_posts WHERE hashtag = ?";
+    $sql_hashtag_posts = "SELECT post FROM hash_posts WHERE hashtag = ?";
     $hashtag_posts = get_db_data($db_connect, $sql_hashtag_posts, $hashtag);
 
     $posts_id = [];
@@ -73,6 +57,7 @@ if (!empty($query) && substr($query, 0, 1)==='#') {
 
 if (empty($posts)) {
     no_search_results($query, $current_user);
+    die();
 }
 
 foreach ($posts as $key => $post) {
@@ -80,22 +65,17 @@ foreach ($posts as $key => $post) {
     $posts[$key] = $post;
 }
 
-function get_post_content($class, $post) {
-    $post_content = include_template("feed/feed-$class.php", ['post' => $post]);
-    print $post_content;
-}
-
 $title = 'Страница результатов поиска';
 $content = include_template('search-results.php', [
-        'title' => $title,
-        'query' => $query,
-        'posts' => $posts
+    'title' => $title,
+    'query' => $query,
+    'posts' => $posts
 ]);
 
 $layout_content = include_template('layout.php', [
-        'content' => $content,
-        'title' => $title,
-        'current_user' => $current_user
+    'content' => $content,
+    'title' => $title,
+    'current_user' => $current_user
 ]);
 
 print($layout_content);
