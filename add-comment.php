@@ -5,19 +5,18 @@ require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
 
-//$user_id = $current_user['id'];
 $post_id = $_GET['post'] ?? '';
 
 $current_url = $_SERVER['HTTP_REFERER'];
 
 if (!$post_id) {
-    echo 'ID поста не укзаан';
+    header("Location: {$current_url}");
     die();
 }
 
 $sql_check_post = "SELECT * FROM posts WHERE id = ?";
 if (!get_db_data($db_connect, $sql_check_post, [$post_id])) {
-    echo 'Пост не найден';
+    header("Location: {$current_url}");
     die();
 }
 

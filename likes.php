@@ -11,11 +11,13 @@ $current_url = $_SERVER['HTTP_REFERER'];
 
 if (empty($post_id)) {
     header("Location: {$current_url}");
+    die();
 }
 
 $sql_post = "SELECT * FROM posts WHERE id = ?";
 if (!get_db_data($db_connect, $sql_post, [$post_id])) {
-    echo 'Лайк добавить нельзя. Указанный пост не существует!';
+    header("Location: {$current_url}");
+    die();
 }
 
 if (check_db_entry($db_connect, 'likes', 'author', $user_id, 'post', $post_id)) {

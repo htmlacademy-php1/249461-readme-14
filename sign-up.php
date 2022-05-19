@@ -4,7 +4,6 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 
-$is_auth = 0;
 $title = 'Регистрация';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -14,8 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
     $layout_content = include_template('layout.php', [
         'content' => $content,
-        'title' => $title,
-        'is_auth' => $is_auth
+        'title' => $title
     ]);
 
     print($layout_content);
@@ -49,8 +47,7 @@ if (count($errors)) {
 
     $layout_content = include_template('layout.php', [
         'content' => $content,
-        'title' => $title,
-        'is_auth' => $is_auth
+        'title' => $title
     ]);
 
     print($layout_content);

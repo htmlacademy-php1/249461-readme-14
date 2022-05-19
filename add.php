@@ -10,7 +10,7 @@ $title = 'Добавить публикацию';
 $sql_types = 'SELECT * FROM types';
 $post_types = get_db_data($db_connect, $sql_types);
 
-/* Массив id типов постов */
+
 $id_types = [];
 foreach ($post_types as $type) {
     $id_types[] = $type['id'];

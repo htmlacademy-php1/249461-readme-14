@@ -53,7 +53,7 @@ switch ($active_tab) {
                     ORDER BY dt_add DESC ";
         $posts = get_db_data($db_connect, $sql_post, [$user['id']]);
 
-        /* Обработка лайков и тегов для каждого поста */
+
         foreach ($posts as $key => $post) {
             $post['likes'] = count_lines_db_table($db_connect, 'id', 'likes', 'post', $post['id']);
             $post['repost_count'] = count_lines_db_table($db_connect, 'origin_post', 'posts', 'origin_post',
@@ -78,12 +78,11 @@ switch ($active_tab) {
             $posts[$key] = $post;
         }
 
-        /* Контент активной вкладки поста */
         $tab_content = include_template("profile/posts.php", [
             'posts' => $posts
         ]);
-
         break;
+
     case 'likes':
         $sql = "SELECT l.dt_add, l.author, l.post, u.login, u.avatar, t.class, p.image, p.video
                 FROM likes l
@@ -95,8 +94,8 @@ switch ($active_tab) {
         $likes = get_db_data($db_connect, $sql, [$user['id']]);
 
         $tab_content = include_template("profile/likes.php", ['likes' => $likes]);
-
         break;
+
     case 'subscriptions':
         $subscribes_list = [];
 
@@ -117,7 +116,6 @@ switch ($active_tab) {
             }
         }
 
-        /* Контент активной вкладки поста */
         $tab_content = include_template("profile/subscriptions.php", [
             'subscribes_list' => $subscribes_list,
             'subscribe_button' => $subscribe_button,
@@ -125,7 +123,6 @@ switch ($active_tab) {
 
         break;
 }
-
 
 $content = include_template('profile.php', [
     'title' => $title,

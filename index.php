@@ -10,6 +10,7 @@ $title = 'блог, каким он должен быть';
 
 if (isset($_SESSION['user'])) {
     header("Location: /feed.php");
+    die();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

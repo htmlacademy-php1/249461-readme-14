@@ -23,7 +23,6 @@ if (!empty($query)) {
 }
 
 if (!empty($query) && substr($query, 0, 1) === '#') {
-
     $sql_tag = "SELECT id FROM hashtags WHERE MATCH(hashtag) AGAINST(?)";
 
     if (!get_db_data($db_connect, $sql_tag, [$query])) {
