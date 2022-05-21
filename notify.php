@@ -22,7 +22,7 @@ function email_new_subscriber($db_connect, $host_id, $subscriber_id, $sender_log
     $subscriber = get_db_data($db_connect, $sql_subscriber, [$subscriber_id])[0];
 
     $subject = 'У вас новый подписчик';
-    $text = "Здравствуйте, {$host['login']}.\nНа вас подписался новый пользователь {$subscriber['login']}.\nВот ссылка на его профиль: http://readme/profile.php?user={$subscriber['id']}";
+    $text = "Здравствуйте, {$host['login']}.\nНа вас подписался новый пользователь {$subscriber['login']}.\nВот ссылка на его профиль: http://{$_SERVER['HTTP_HOST']}/profile.php?user={$subscriber['id']}";
 
     $messege_subscribe = (new Email())
         ->to($host['email'])
@@ -38,7 +38,7 @@ function email_new_subscriber($db_connect, $host_id, $subscriber_id, $sender_log
  * TODO - Узнать как лучше поступить при отправке нескольких emails !!!
  * */
 
-function email_new_post($db_connect, $post_author = 2, $post = '', $sender_login = 'readme.project.22@gmail.com', $sender_pass = 'Readme2022')  {
+function email_new_post($db_connect, $post_author, $post = '', $sender_login = 'readme.project.22@gmail.com', $sender_pass = 'Readme2022')  {
     $dsn = "gmail+smtp://{$sender_login}:{$sender_pass}@default";
     $transport = Transport::fromDsn($dsn);
 
@@ -54,13 +54,11 @@ function email_new_post($db_connect, $post_author = 2, $post = '', $sender_login
     $subject = "Новая публикация от пользователя {$author['login']}}";
 
     foreach ($subscribers as $subscriber) {
-        $text = "Здравствуйте, {$subscriber['login']}.
-        Пользователь {$author['login']} только что опубликовал новую запись „{$post['title']}“.
-        Посмотрите её на странице пользователя: http://readme/profile.php?user={$author['id']}";
+        $text = "Здравствуйте, {$subscriber['login']}.\nПользователь {$author['login']} только что опубликовал новую запись „{$post['title']}“.\nПосмотрите её на странице пользователя: http://{$_SERVER['HTTP_HOST']}/profile.php?user={$author['id']}";
 
         $messege_post = (new Email())
-            ->to($host['email'])
-            ->from($subscriber['email'])
+            ->to($subscriber['email'])
+            ->from($sender_login)
             ->subject($subject)
             ->text($text);
 
@@ -68,6 +66,3 @@ function email_new_post($db_connect, $post_author = 2, $post = '', $sender_login
         $mailer->send($messege_post);
     }
 }
-
-
-

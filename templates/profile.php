@@ -40,7 +40,7 @@
                         <a href="subscribe.php?host=<?= $user['id'] ?>"
                            class="profile__user-button user__button user__button--subscription button button--<?= $subscribe_button['class'] ?>"><?= $subscribe_button['text'] ?></a>
                         <a class="profile__user-button user__button user__button--writing button button--green"
-                           href="#">Сообщение</a>
+                           href="messages.php?chat=<?=$user['id']?>">Сообщение</a>
                     <?php endif; ?>
                 </div>
             </div>

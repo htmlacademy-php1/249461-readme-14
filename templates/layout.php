@@ -139,7 +139,7 @@
                     </li>
                     <li class="header__my-page header__my-page--messages">
                         <a class="header__page-link <?= $active_page === 'messages' ? 'header__page-link--active' : '' ?>"
-                           href="messages.html" title="Личные сообщения">
+                           href="messages.php" title="Личные сообщения">
                             <span class="visually-hidden">Личные сообщения</span>
                         </a>
                     </li>
@@ -171,9 +171,11 @@
                                             </a>
                                         </li>
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="messages.php">
                                             <span class="header__profile-nav-text">Сообщения
-                                                <i class="header__profile-indicator">2</i>
+                                                <?php if ($current_user['new_messages'] > 0 ) : ?>
+                                                    <i class="header__profile-indicator"><?=htmlspecialchars($current_user['new_messages'])?></i>
+                                                <?php endif; ?>
                                             </span>
                                             </a>
                                         </li>
@@ -250,7 +252,7 @@
                         <a class="footer__page-link" href="popular.html">Популярный контент</a>
                     </li>
                     <li class="footer__my-page footer__my-page--messages">
-                        <a class="footer__page-link" href="messages.html">Личные сообщения</a>
+                        <a class="footer__page-link" href="messages.php">Личные сообщения</a>
                     </li>
                 </ul>
                 <div class="footer__copyright">

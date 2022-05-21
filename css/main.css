@@ -3294,6 +3294,7 @@ img {
     margin: 0;
     padding: 0;
     list-style: none;
+    min-height: 450px;
     max-height: 680px;
     overflow-y: auto
 }

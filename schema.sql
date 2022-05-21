@@ -162,14 +162,15 @@ CREATE TABLE IF NOT EXISTS `readme`.`subscribes` (
 
 
 -- -----------------------------------------------------
--- Table `readme`.`message`
+-- Table `readme`.`messages`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `readme`.`message` (
+CREATE TABLE IF NOT EXISTS `readme`.`messages` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `dt_add` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `message` TEXT NOT NULL,
     `sender` INT NOT NULL,
     `receiver` INT NOT NULL,
+    `is_read` INT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC),
     INDEX `com_author_idx` (`sender` ASC),
