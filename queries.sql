@@ -42,9 +42,22 @@ VALUES ('1', '2'),
        ('2', '3'),
        ('2', '1');
 
-INSERT INTO message (message, sender, receiver)
-VALUES ('Привет, классные посты делаешь', '1', '3'),
-       ('Привет. Спасибо.', '3', '1');
+INSERT INTO messages (message, sender, receiver)
+VALUES ('Lorem ipsum dolor sit amet', '1', '2'),
+       ('Duis aute irure dolor in reprehenderit in voluptate', '2', '1'),
+       ('Excepteur sint occaecat cupidatat non proident', '1', '2'),
+       ('Привет. Спасибо.', '2', '1'),
+       ('Lorem ipsum dolor sit amet', '2', '3'),
+       ('Duis aute irure dolor in reprehenderit in voluptate', '3', '2'),
+       ('Excepteur sint occaecat cupidatat non proident', '2', '3'),
+       ('Привет. Спасибо.', '3', '2'),
+       ('Lorem ipsum dolor sit amet', '1', '3'),
+       ('Duis aute irure dolor in reprehenderit in voluptate', '3', '1'),
+       ('Excepteur sint occaecat cupidatat non proident', '1', '3'),
+       ('Привет. Спасибо.', '3', '1'),
+       ('Lorem ipsum dolor sit amet', '3', '2'),
+       ('Duis aute irure dolor in reprehenderit in voluptate', '2', '3'),
+       ('Excepteur sint occaecat cupidatat non proident', '2', '3');
 
 INSERT INTO hashtags (hashtag)
 VALUES ('#photooftheday'),

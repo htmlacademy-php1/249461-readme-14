@@ -19,7 +19,7 @@ function cut_text(string $text, int $letters_num = MAX_TEXT_LENGTH): string
 
     $short_text = [];
     foreach ($words as $word) {
-        $length += strlen($word);
+        $length += mb_strlen($word);
         if ($length <= $letters_num) {
             $short_text[] = $word;
         } else {
@@ -103,8 +103,7 @@ function get_db_data(mysqli $db_connect, string $sql, array $data = [])
  * @param string $sort_key Ключ для выборки
  * @return mixed|string Ошибка БД или кол-во записей
  */
-function count_lines_db_table( mysqli $db_connect, string $column, string $table, string $sort_column = '', string $sort_key = ''
-) {
+function count_lines_db_table( mysqli $db_connect, string $column, string $table, string $sort_column = '', string $sort_key = '') {
     $ids = [];
 
     $sql = "SELECT COUNT($column) FROM $table";
@@ -652,4 +651,29 @@ function generate_sql_tags_repost_post(array $tags, int $post_id)
     }
 
     return trim($sql_insert_tags, ",");
+}
+
+/**
+ * Функция подсчета непрочитанных сообщений
+ * @param mysqli $db_connect Данные соединения с БД
+ * @param int $sender ID отправителя; По умолчанию 0 - считаются все непрочитанные; Иначе от указаного пользователя
+ * @param int $receiver ID получателя
+ * @param int $is_read Ключ сообщений. По умолчанию 0 - "не прочитано"; 1 - "Прочитано"
+ * @return mixed ошибка БД, или кол-во сообщений
+ */
+function count_not_read_messages( mysqli $db_connect, int $receiver, int $sender = 0, int $is_read = 0) {
+    $data = [$is_read,$receiver];
+    $sql = "SELECT COUNT(id) FROM messages WHERE is_read = ? AND receiver = ?";
+
+    if ($sender != 0) {
+        $data[] = $sender;
+        $sql = "SELECT COUNT(id) FROM messages WHERE is_read = ? AND sender = ? AND receiver = ?";
+    }
+    $stmt = db_get_prepare_stmt($db_connect, $sql, $data);
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $counter = mysqli_fetch_assoc($result);
+    return $counter["COUNT(id)"];
 }

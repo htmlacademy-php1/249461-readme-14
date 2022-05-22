@@ -4,6 +4,7 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
+require_once 'notify.php';
 
 $title = 'Добавить публикацию';
 
@@ -120,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($res) {
             $post_id = mysqli_insert_id($db_connect);
             add_post_tags($post_tags, $db_connect, $post_id);
+            email_new_post($db_connect, $current_user['id'], $new_post);
             header("Location: post.php?id=" . $post_id);
         }
     }
