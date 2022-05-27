@@ -1,10 +1,3 @@
-<?php
-/*$errors = [];
-if (isset($_SESSION['message'])) {
-    $errors = $_SESSION['message'];
-    unset($_SESSION['message']);
-}
-*/?>
 <main class="page__main page__main--messages">
     <h1 class="visually-hidden">Личные сообщения</h1>
     <section class="messages tabs">
@@ -14,9 +7,11 @@ if (isset($_SESSION['message'])) {
                 <?php if (!isset($no_message) && isset($users)) : ?>
                     <?php foreach ($users as $user) : ?>
                     <li class="messages__contacts-item">
-                        <a class="messages__contacts-tab tabs__item <?=($active_chat == $user['id'] ? 'messages__contacts-tab--active tabs__item--active' : '')?>" href="messages.php?chat=<?=htmlspecialchars($user['id'])?>">
+                        <a class="messages__contacts-tab tabs__item <?=($active_chat === $user['id'] ? 'messages__contacts-tab--active tabs__item--active' : '')?>" href="messages.php?chat=<?=htmlspecialchars($user['id'])?>">
                             <div class="messages__avatar-wrapper">
+                                <?php if (isset($user['avatar'])): ?>
                                 <img class="messages__avatar" src="<?=$user['avatar']?>" alt="Аватар пользователя">
+                                <?php endif; ?>
                                 <?php if ($user['not_read'] > 0) : ?>
                                     <i class="messages__indicator"><?=htmlspecialchars($user['not_read'])?></i>
                                 <?php endif; ?>
@@ -28,7 +23,7 @@ if (isset($_SESSION['message'])) {
                                 <?php if ($user['message'] != '') :?>
                                 <div class="messages__preview">
                                     <p class="messages__preview-text">
-                                        <?php if (htmlspecialchars($user['message']['sender']) == $current_user['id']) : ?>
+                                        <?php if (htmlspecialchars($user['message']['sender']) === $current_user['id']) : ?>
                                             Вы: <?=cut_text(htmlspecialchars($user['message']['message']), 10)?>
                                         <?php else: ?>
                                             <?=cut_text(htmlspecialchars($user['message']['message']), 10)?>
@@ -53,13 +48,15 @@ if (isset($_SESSION['message'])) {
                 <ul class="messages__list tabs__content tabs__content--active">
                     <?php if (!isset($no_message) && isset($messages)) : ?>
                         <?php foreach ($messages as $message) : ?>
-                            <?php $user = ($message['sender'] == $current_user['id']) ? $current_user : $active_chat_user ?>
-                            <li class="messages__item <?=($message['sender'] == $current_user['id']) ? 'messages__item--my' : '' ?>">
+                            <?php $user = ($message['sender'] === $current_user['id']) ? $current_user : $active_chat_user ?>
+                            <li class="messages__item <?=($message['sender'] === $current_user['id']) ? 'messages__item--my' : '' ?>">
                                 <div class="messages__info-wrapper">
                                     <div class="messages__item-avatar">
                                         <a class="messages__author-link" href="profile.php?user=<?=htmlspecialchars($user['id'])?>">
-                                            <img class="messages__avatar" src="<?=$user['avatar']?>"
+                                            <?php if (isset($user['avatar'])):?>
+                                                <img class="messages__avatar" src="<?=$user['avatar']?>"
                                                  alt="Аватар пользователя">
+                                            <?php endif;?>
                                         </a>
                                     </div>
                                     <div class="messages__item-info">
@@ -88,14 +85,14 @@ if (isset($_SESSION['message'])) {
                             <img class="comments__picture" src="<?=$current_user['avatar']?>" alt="Аватар пользователя">
                         <?php endif; ?>
                     </div>
-                    <div class="form__input-section <?= ($errors['message']) ? 'form__input-section--error' : '' ?>">
+                    <div class="form__input-section <?= isset($errors['message']) ? 'form__input-section--error' : '' ?>">
                         <textarea class="comments__textarea form__textarea form__input"
                           placeholder="Ваше сообщение" name="message"></textarea>
                         <label class="visually-hidden">Ваше сообщение</label>
-                        <?php if (!empty($errors)) : ?>
+                        <?php if (isset($errors['message'])) : ?>
                         <button class="form__error-button button" type="button">!</button>
                         <div class="form__error-text">
-                            <p class="form__error-desc"><?= $errors['message'] ?></p>
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['message']) ?></p>
                         </div>
                         <?php endif; ?>
                     </div>

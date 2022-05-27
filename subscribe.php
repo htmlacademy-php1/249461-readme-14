@@ -4,7 +4,6 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
-require_once 'notify.php';
 
 $follower = $current_user['id'];
 $host = $_GET['host'];

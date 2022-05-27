@@ -4,7 +4,6 @@ require_once 'helpers.php';
 require_once 'functions.php';
 require_once 'db_connect.php';
 require_once 'session.php';
-require_once 'notify.php';
 
 $title = 'Добавить публикацию';
 
@@ -33,7 +32,7 @@ if (isset($_GET['type']) && !in_array($_GET['type'], $id_types)) {
 
 $add_form = include_template("add-forms/add-form-${current_type_class}.php", ['type_id' => $current_type_id]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_post = $_POST;
     $current_type_id = $new_post['post_type'];
     $current_type_class = get_post_type_class($current_type_id, $post_types);
@@ -106,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             break;
     }
 
-    if (count($errors)) {
+    if (count($errors) !== 0) {
         $add_form = include_template("add-forms/add-form-${current_type_class}.php",
             ['errors' => $errors]);
     } else {

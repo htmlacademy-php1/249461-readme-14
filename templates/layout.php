@@ -1,3 +1,8 @@
+<?php
+if (!isset($active_page)) {
+    $active_page = '';
+}
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -179,7 +184,6 @@
                                             </span>
                                             </a>
                                         </li>
-
                                         <li class="header__profile-nav-item">
                                             <a class="header__profile-nav-link" href="logout.php">
                                                 <span class="header__profile-nav-text">Выход</span>
@@ -196,11 +200,14 @@
                 <?php else: ?>
                     <ul class="header__user-nav">
                         <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button"
+                            <a class="header__user-button header__authorization-button button
+                                     <?= $active_page === 'login' ? 'header__user-button--active' : '' ?>"
                                href="sign-in.php">Вход</a>
                         </li>
                         <li>
-                            <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
+                            <a class="header__user-button header__register-button button
+                                     <?= $active_page === 'register' ? 'header__user-button--active' : '' ?>"
+                               href="sign-up.php">Регистрация</a>
                         </li>
                     </ul>
                 <?php endif; ?>
@@ -267,8 +274,5 @@
         </div>
     </div>
 </footer>
-<!--<script src="libs/dropzone.js"></script>
-<script src="js/dropzone-settings.js"></script>
-<script src="js/main.js"></script>-->
 </body>
 </html>

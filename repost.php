@@ -25,7 +25,7 @@ if (!get_db_data($db_connect, $sql_origin_post, [$post_id])) {
 $origin_post = get_db_data($db_connect, $sql_origin_post, [$post_id])[0];
 
 $sql_tags = "SELECT hashtag FROM hash_posts WHERE post = ?";
-if (get_db_data($db_connect, $sql_tags, [$post_id])) {
+if (!empty(get_db_data($db_connect, $sql_tags, [$post_id]))) {
     $post_tags = get_db_data($db_connect, $sql_tags, [$post_id]);
 }
 
@@ -38,7 +38,7 @@ $post['views'] = 0;
 $post['repost'] = 1;
 
 foreach ($post as $key => $value) {
-    if ($value == '') {
+    if ($value === '') {
         $post[$key] = null;
     }
 }
@@ -60,7 +60,7 @@ if ($result_post) {
 
 $result_tags = true;
 
-if ($post_tags) {
+if (!empty($post_tags)) {
     $sql_insert_tags = generate_sql_tags_repost_post($post_tags, $post_id);
 
     $stmt_tags = db_get_prepare_stmt($db_connect, $sql_insert_tags);

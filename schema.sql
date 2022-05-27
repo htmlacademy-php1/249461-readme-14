@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `readme`.`posts` (
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+CREATE FULLTEXT INDEX post_search ON posts(title,text,quote_author);
+
 
 -- -----------------------------------------------------
 -- Table `readme`.`comments`

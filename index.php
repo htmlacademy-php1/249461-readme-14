@@ -29,7 +29,7 @@ $validation_rules = [
 
 $errors = validate($_POST ?? [], $validation_rules, $db_connect);
 
-if (count($errors)) {
+if (count($errors) !== 0) {
     $layout_content = include_template('guest.php', [
         'title' => $title,
         'errors' => $errors

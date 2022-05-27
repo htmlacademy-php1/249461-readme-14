@@ -9,8 +9,8 @@
                 <ul class="popular__sorting-list sorting__list">
                     <li class="sorting__item sorting__item--popular">
                         <a class="sorting__link
-                            <?= isset($filters['sort']) && $filters['sort'] == 'popular' ? 'sorting__link--active' : '' ?>
-                            <?= isset($filters['sort_type']) && $filters['sort_type'] == 'DESC' ? '' : 'sorting__link--reverse' ?>"
+                            <?= isset($filters['sort']) && $filters['sort'] === 'popular' ? 'sorting__link--active' : '' ?>
+                            <?= isset($filters['sort_type']) && $filters['sort_type'] === 'DESC' ? '' : 'sorting__link--reverse' ?>"
                            href="<?= '/popular.php?' . http_build_query(array_merge($filters, ['sort' => 'popular'],
                                ['sort_type' => $filters['sort_type']], ['page' => 1])) ?>">
                             <span>Популярность</span>
@@ -21,8 +21,8 @@
                     </li>
                     <li class="sorting__item">
                         <a class="sorting__link
-                            <?= isset($filters['sort']) && $filters['sort'] == 'likes' ? 'sorting__link--active' : '' ?>
-                            <?= isset($filters['sort_type']) && $filters['sort_type'] == 'DESC' ? '' : 'sorting__link--reverse' ?>"
+                            <?= isset($filters['sort']) && $filters['sort'] === 'likes' ? 'sorting__link--active' : '' ?>
+                            <?= isset($filters['sort_type']) && $filters['sort_type'] === 'DESC' ? '' : 'sorting__link--reverse' ?>"
                            href="<?= '/popular.php?' . http_build_query(array_merge($filters, ['sort' => 'likes'],
                                ['sort_type' => $filters['sort_type']], ['page' => 1])) ?>">
                             <span>Лайки</span>
@@ -33,8 +33,8 @@
                     </li>
                     <li class="sorting__item">
                         <a class="sorting__link
-                            <?= isset($filters['sort']) && $filters['sort'] == 'date' ? 'sorting__link--active' : '' ?>
-                            <?= isset($filters['sort_type']) && $filters['sort_type'] == 'DESC' ? '' : 'sorting__link--reverse' ?>"
+                            <?= isset($filters['sort']) && $filters['sort'] === 'date' ? 'sorting__link--active' : '' ?>
+                            <?= isset($filters['sort_type']) && $filters['sort_type'] === 'DESC' ? '' : 'sorting__link--reverse' ?>"
                            href="<?= '/popular.php?' . http_build_query(array_merge($filters, ['sort' => 'date'],
                                ['sort_type' => $filters['sort_type']], ['page' => 1])) ?>">
                             <span>Дата</span>
@@ -104,10 +104,10 @@
                         </div>
                         <div class="post__indicators">
                             <div class="post__buttons">
-                                <a class="post__indicator post__indicator--likes <?= ($post['has_like'] == true) ? 'post__indicator--likes-active' : '' ?> button"
+                                <a class="post__indicator post__indicator--likes <?= ($post['has_like'] === true) ? 'post__indicator--likes-active' : '' ?> button"
                                    href="likes.php?post=<?= htmlspecialchars($post['id']) ?>" title="Лайк">
                                     <?php
-                                    if ($post['has_like'] == true) : ?>
+                                    if ($post['has_like'] === true) : ?>
                                         <svg class="post__indicator-icon post__indicator-icon--like-active" width="20"
                                              height="17">
                                             <use xlink:href="#icon-heart-active"></use>
@@ -135,7 +135,7 @@
                 </article>
             <?php endforeach; ?>
         </div>
-        <?php if ($show_pagination == true) : ?>
+        <?php if ($show_pagination === true) : ?>
             <div class="popular__page-links">
                 <a class="popular__page-link popular__page-link--prev button button--gray"
                    href="<?= '/popular.php?' . http_build_query(array_merge($filters,

@@ -3,13 +3,15 @@
     <?php foreach ($posts as $post) : ?>
         <article class="profile__post post post-<?= htmlspecialchars($post['class']) ?>">
             <header class="post__header">
-                <?php if ($post['repost'] == 1) : ?>
+                <?php if ($post['repost'] === 1) : ?>
                     <div class="post__author">
                         <a class="post__author-link"
                            href="profile.php?user=<?= htmlspecialchars($post['origin_author']) ?>" title="Автор">
                             <div class="post__avatar-wrapper post__avatar-wrapper--repost">
+                                <?php if (isset($post['origin_avatar'])): ?>
                                 <img class="post__author-avatar" src="<?= $post['origin_avatar'] ?>"
                                      alt="Аватар пользователя">
+                                <?php endif;?>
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name">Репост: <?= htmlspecialchars($post['origin_login']) ?></b>
@@ -32,10 +34,10 @@
             <footer class="post__footer">
                 <div class="post__indicators">
                     <div class="post__buttons">
-                        <a class="post__indicator post__indicator--likes <?= ($post['has_like'] == true) ? 'post__indicator--likes-active' : '' ?> button"
+                        <a class="post__indicator post__indicator--likes <?= ($post['has_like'] === true) ? 'post__indicator--likes-active' : '' ?> button"
                            href="likes.php?post=<?= htmlspecialchars($post['id']) ?>" title="Лайк">
                             <?php
-                            if ($post['has_like'] == true) : ?>
+                            if ($post['has_like'] === true) : ?>
                                 <svg class="post__indicator-icon post__indicator-icon--like-active" width="20"
                                      height="17">
                                     <use xlink:href="#icon-heart-active"></use>

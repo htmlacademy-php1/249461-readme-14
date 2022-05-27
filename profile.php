@@ -35,14 +35,6 @@ $filter_tabs = [
 
 $active_tab = $_GET['tab'] ?? 'posts';
 
-function get_origin_post_info($db_connect, $post_id)
-{
-    $sql = "SELECT p.dt_add, u.login, u.avatar
-            FROM posts p
-            JOIN users u ON u.id = p.post_author
-            WHERE p.id = ?";
-    return get_db_data($db_connect, $sql, [$post_id])[0];
-}
 
 switch ($active_tab) {
     case 'posts':
@@ -61,7 +53,7 @@ switch ($active_tab) {
             $post['has_like'] = check_db_entry($db_connect, 'likes', 'author', $current_user['id'], 'post',
                 $post['id']);
 
-            if ($post['origin_post']) {
+            if (isset($post['origin_post'])) {
                 $origin_post = get_origin_post_info($db_connect, $post['origin_post']);
 
                 $post['origin_date'] = $origin_post['dt_add'];
@@ -89,7 +81,8 @@ switch ($active_tab) {
                 JOIN users u ON u.id = l.author
                 JOIN posts p ON p.id = l.post
                 JOIN types t ON t.id = p.post_type
-                WHERE post IN (SELECT id FROM posts WHERE post_author = ?)";
+                WHERE post IN (SELECT id FROM posts WHERE post_author = ?)
+                ORDER BY dt_add DESC";
 
         $likes = get_db_data($db_connect, $sql, [$user['id']]);
 

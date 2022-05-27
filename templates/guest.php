@@ -156,8 +156,10 @@
                     </svg>
                     <label class="visually-hidden">Логин</label>
                     <?= isset($errors['login']) ? '</div>' : '' ?>
-                    <span
-                        class="form__error-label form__error-label--login"><?= isset($errors['login']) ? htmlspecialchars($errors['login']) : '' ?></span>
+                    <?php if (isset($errors['login'])): ?>
+                        <span
+                            class="form__error-label form__error-label--login"><?= isset($errors['login']) ? htmlspecialchars($errors['login']) : '' ?></span>
+                    <?php endif; ?>
                 </div>
                 <div class="authorization__input-wrapper form__input-wrapper">
                     <?= isset($errors['password']) ? '<div class="form__input-section form__input-section--error">' : '' ?>
@@ -168,8 +170,10 @@
                     </svg>
                     <label class="visually-hidden">Пароль</label>
                     <?= isset($errors['password']) ? '</div>' : '' ?>
-                    <span
-                        class="form__error-label form__error-label--login"><?= htmlspecialchars($errors['password']) ?></span>
+                    <?php if (isset($errors['password'])): ?>
+                        <span
+                            class="form__error-label form__error-label--login"><?= isset($errors['password']) ? htmlspecialchars($errors['password']) : '' ?></span>
+                    <?php endif; ?>
                 </div>
                 <a class="authorization__recovery" href="#">Восстановить пароль</a>
                 <button class="authorization__submit button button--main" type="submit">Войти</button>

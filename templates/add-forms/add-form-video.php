@@ -12,9 +12,11 @@
                            placeholder="Введите заголовок" value="<?= get_post_val('title') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
-                    </div>
+                    <?php if(isset($errors['title'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -26,9 +28,11 @@
                            placeholder="Введите ссылку" value="<?= get_post_val('video') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['video']) ?></p>
-                    </div>
+                    <?php if(isset($errors['video'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['video']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -39,9 +43,11 @@
                            placeholder="Введите теги" value="<?= get_post_val('tags') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
-                    </div>
+                    <?php if(isset($errors['tags'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

@@ -17,10 +17,10 @@ if (isset($_SESSION['comment_errors'])) {
 
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes <?= ($post['has_like'] == true) ? 'post__indicator--likes-active' : '' ?> button"
+                            <a class="post__indicator post__indicator--likes <?= ($post['has_like'] === true) ? 'post__indicator--likes-active' : '' ?> button"
                                href="likes.php?post=<?= htmlspecialchars($post['id']) ?>" title="Лайк">
                                 <?php
-                                if ($post['has_like'] == true) : ?>
+                                if ($post['has_like'] === true) : ?>
                                     <svg class="post__indicator-icon post__indicator-icon--like-active" width="20"
                                          height="17">
                                         <use xlink:href="#icon-heart-active"></use>
@@ -66,7 +66,7 @@ if (isset($_SESSION['comment_errors'])) {
                         <form class="comments__form form"
                               action="add-comment.php?post=<?= htmlspecialchars($post['id']) ?>" method="post">
                             <div class="comments__my-avatar">
-                                <?php if ($current_user['avatar'] != '') : ?>
+                                <?php if (isset($current_user['avatar'])) : ?>
                                     <img class="comments__picture" src="<?= $current_user['avatar'] ?>"
                                          alt="Аватар пользователя">
                                 <?php endif; ?>
@@ -77,9 +77,11 @@ if (isset($_SESSION['comment_errors'])) {
                                           placeholder="Ваш комментарий" name="comment"></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <button class="form__error-button button" type="button">!</button>
-                                <div class="form__error-text">
-                                    <p class="form__error-desc"><?= $errors['comment'] ?></p>
-                                </div>
+                                <?php if(isset($errors['comment'])): ?>
+                                    <div class="form__error-text">
+                                        <p class="form__error-desc"><?= htmlspecialchars($errors['comment']) ?></p>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
@@ -90,7 +92,7 @@ if (isset($_SESSION['comment_errors'])) {
                                         <div class="comments__avatar">
                                             <a class="user__avatar-link"
                                                href="profile.php?user=<?= htmlspecialchars($comment['id']) ?>">
-                                                <?php if ($comment['avatar'] != '') : ?>
+                                                <?php if (isset($comment['avatar'])) : ?>
                                                     <img class="comments__picture" src="<?= $comment['avatar'] ?>"
                                                          alt="Аватар пользователя">
                                                 <?php endif; ?>
@@ -165,7 +167,7 @@ if (isset($_SESSION['comment_errors'])) {
                     <div class="post-details__user-buttons user__buttons">
                         <a href="subscribe.php?host=<?= $author['id'] ?>"
                            class="profile__user-button user__button user__button--subscription button button--<?= $subscribe_button['class'] ?>"><?= $subscribe_button['text'] ?></a>
-                        <a class="user__button user__button--writing button button--green" href="#">Сообщение</a>
+                        <a class="user__button user__button--writing button button--green" href="messages.php?chat=<?=$author['id']?>">Сообщение</a>
                     </div>
                 </div>
             </div>
