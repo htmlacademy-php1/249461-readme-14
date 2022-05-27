@@ -52,7 +52,7 @@
                     <ul class="profile__tabs-list filters__list tabs__list">
                         <?php foreach ($filter_tabs as $key => $tab): ?>
                             <li class="profile__tabs-item filters__item">
-                                <a class="profile__tabs-link filters__button tabs__item button <?= ($active_tab == $key) ? 'filters__button--active' : '' ?>"
+                                <a class="profile__tabs-link filters__button tabs__item button <?= ($active_tab === $key) ? 'filters__button--active' : '' ?>"
                                    href="<?= $_SERVER['REQUEST_URI'] . '&tab=' . $key ?>"><?= $tab ?></a>
                             </li>
                         <?php endforeach; ?>

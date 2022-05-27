@@ -12,9 +12,11 @@
                            placeholder="Введите заголовок" value="<?= get_post_val('title') ?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
-                    </div>
+                    <?php if(isset($errors['title'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -27,9 +29,11 @@
                               id="cite-text" placeholder="Текст цитаты"><?= get_post_val('text') ?></textarea>
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['text']) ?></p>
-                    </div>
+                    <?php if(isset($errors['text'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -41,9 +45,11 @@
                            placeholder="Автор цитаты" value="<?= get_post_val('quote_author') ?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['quote_author']) ?></p>
-                    </div>
+                    <?php if(isset($errors['quote_author'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['quote_author']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -54,9 +60,11 @@
                            placeholder="Введите теги" value="<?= get_post_val('tags') ?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
-                    </div>
+                    <?php if(isset($errors['tags'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

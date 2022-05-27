@@ -5,6 +5,7 @@ require_once 'functions.php';
 require_once 'db_connect.php';
 
 $title = 'Регистрация';
+$active_page = 'register';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     $content = include_template('sign-up.php', [
@@ -13,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
     $layout_content = include_template('layout.php', [
         'content' => $content,
-        'title' => $title
+        'title' => $title,
+        'active_page' => $active_page
     ]);
 
     print($layout_content);
@@ -39,7 +41,7 @@ if (isset($errors['user_pass'])) {
     $errors['password_repeat'] = $errors['user_pass'];
 }
 
-if (count($errors)) {
+if (count($errors) !== 0) {
     $content = include_template('sign-up.php', [
         'title' => $title,
         'errors' => $errors
@@ -47,7 +49,8 @@ if (count($errors)) {
 
     $layout_content = include_template('layout.php', [
         'content' => $content,
-        'title' => $title
+        'title' => $title,
+        'active_page' => $active_page
     ]);
 
     print($layout_content);

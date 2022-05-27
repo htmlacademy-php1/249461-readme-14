@@ -15,7 +15,7 @@
                                        href="profile.php?user=<?= htmlspecialchars($post['post_author']) ?>"
                                        title="Автор">
                                         <div class="post__avatar-wrapper">
-                                            <?php if ($post['avatar'] != '') : ?>
+                                            <?php if (isset($post['avatar'])) : ?>
                                                 <img class="post__author-avatar" src="<?= $post['avatar'] ?>"
                                                      alt="Аватар пользователя" width="60" height="60">
                                             <?php endif; ?>
@@ -32,7 +32,7 @@
                                     </a>
                                 </header>
                                 <div class="post__main">
-                                    <?php if ($post['class'] == 'text' || $post['class'] == 'photo') : ?>
+                                    <?php if ($post['class'] === 'text' || $post['class'] === 'photo') : ?>
                                         <h2>
                                             <a href="post.php?id=<?= htmlspecialchars($post['id']) ?>"><?= htmlspecialchars($post['title']) ?></a>
                                         </h2>
@@ -43,10 +43,10 @@
                                 </div>
                                 <footer class="post__footer post__indicators">
                                     <div class="post__buttons">
-                                        <a class="post__indicator post__indicator--likes <?= ($post['has_like'] == true) ? 'post__indicator--likes-active' : '' ?> button"
+                                        <a class="post__indicator post__indicator--likes <?= ($post['has_like'] === true) ? 'post__indicator--likes-active' : '' ?> button"
                                            href="likes.php?post=<?= htmlspecialchars($post['id']) ?>" title="Лайк">
                                             <?php
-                                            if ($post['has_like'] == true) : ?>
+                                            if ($post['has_like'] === true) : ?>
                                                 <svg class="post__indicator-icon post__indicator-icon--like-active"
                                                      width="20" height="17">
                                                     <use xlink:href="#icon-heart-active"></use>

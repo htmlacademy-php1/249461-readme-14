@@ -1,5 +1,10 @@
 <?php
 
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+
+require 'vendor/autoload.php';
 require_once 'helpers.php';
 
 /**
@@ -149,7 +154,7 @@ function get_get_val(string $name)
 function get_post_type_class(int $id, array $types)
 {
     foreach ($types as $type) {
-        if ($type['id'] == $id) {
+        if ($type['id'] === $id) {
             $type = $type['class'];
             break;
         }
@@ -654,6 +659,20 @@ function generate_sql_tags_repost_post(array $tags, int $post_id)
 }
 
 /**
+ * Возвращает данные оригинального поста если с него был репост
+ * @param mysqli $db_connect Данные подключения к БД
+ * @param int $post_id ID поста с которого был сделан репост
+ * @return mixed
+ */
+function get_origin_post_info(mysqli $db_connect, int $post_id) {
+    $sql = "SELECT p.dt_add, u.login, u.avatar
+            FROM posts p
+            JOIN users u ON u.id = p.post_author
+            WHERE p.id = ?";
+    return get_db_data($db_connect, $sql, [$post_id])[0];
+}
+
+/**
  * Функция подсчета непрочитанных сообщений
  * @param mysqli $db_connect Данные соединения с БД
  * @param int $sender ID отправителя; По умолчанию 0 - считаются все непрочитанные; Иначе от указаного пользователя
@@ -676,4 +695,112 @@ function count_not_read_messages( mysqli $db_connect, int $receiver, int $sender
 
     $counter = mysqli_fetch_assoc($result);
     return $counter["COUNT(id)"];
+}
+
+/**
+ * Фукнция отрисовки страницы обмена сообщениями
+ * @param array $content_data Массив с параметрами контента страницы
+ * @param array $current_user Массив с данными текущего пользователя
+ * @return void Контент страницы
+ */
+function print_messages_page(array $content_data, array $current_user)
+{
+    $content = include_template('messages.php', $content_data);
+
+    $layout_content = include_template('layout.php', [
+        'content' => $content,
+        'title' => 'Личные сообщения',
+        'current_user' => $current_user,
+        'active_page' => 'messages'
+    ]);
+
+    print($layout_content);
+}
+
+/**
+ * Получает последнее сообщение в чате между указаными пользователями
+ * @param mysqli $db_connect Данные подключения к БД
+ * @param int $user1 Пользователь с которым ведется переписка
+ * @param int $user2 Активный пользователь
+ * @return mixed Ошибка БД, или массив с данными последнего сообщения в переписке
+ */
+function get_last_message(mysqli $db_connect, int $user1, int $user2)
+{
+    $sql = "SELECT dt_add, message, sender FROM messages WHERE (sender = ? AND receiver = ?) OR (receiver = ? AND sender = ?) ORDER BY dt_add DESC";
+    if (empty(get_db_data($db_connect, $sql, [$user1, $user2, $user1, $user2]))) {
+        return '';
+    }
+    return get_db_data($db_connect, $sql, [$user1, $user2, $user1, $user2])[0];
+}
+
+/**
+ * Отправка уведомления о новом подписчеке
+ * @param mysqli $db_connect Данные подключения к БД
+ * @param int $host_id ID на кого подписываются
+ * @param int $subscriber_id ID того кто подписывается
+ * @param string $sender_login логин почты с которой отправляется уведомление
+ * @param string $sender_pass пароль почты с которой отправляется уведомление
+ * @return void
+ * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+ */
+function email_new_subscriber(mysqli $db_connect, int $host_id, int $subscriber_id, string $sender_login = 'readme.project.22@gmail.com', string $sender_pass = 'Readme2022') {
+    $dsn = "gmail+smtp://{$sender_login}:{$sender_pass}@default";
+    $transport = Transport::fromDsn($dsn);
+
+    $sql_host = "SELECT login, email FROM users WHERE id = ?";
+    $sql_subscriber = "SELECT id, login FROM users WHERE id = ?";
+
+    $host = get_db_data($db_connect, $sql_host, [$host_id])[0];
+    $subscriber = get_db_data($db_connect, $sql_subscriber, [$subscriber_id])[0];
+
+    $subject = 'У вас новый подписчик';
+    $text = "Здравствуйте, {$host['login']}.\nНа вас подписался новый пользователь {$subscriber['login']}.\nВот ссылка на его профиль: http://{$_SERVER['HTTP_HOST']}/profile.php?user={$subscriber['id']}";
+
+    $messege_subscribe = (new Email())
+        ->to($host['email'])
+        ->from($sender_login)
+        ->subject($subject)
+        ->text($text);
+
+    $mailer = new Mailer($transport);
+    $mailer->send($messege_subscribe);
+}
+
+/**
+ * Уведомление о публикации нового поста
+ * @param mysqli $db_connect Данные подключения к БД
+ * @param int $post_author ID автора поста
+ * @param array $post Данные поста
+ * @param string $sender_login логин почты с которой отправляется уведомление
+ * @param string $sender_pass пароль почты с которой отправляется уведомление
+ * @return void
+ * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+ */
+function email_new_post(mysqli $db_connect, int $post_author, array $post = [], string $sender_login = 'readme.project.22@gmail.com', string $sender_pass = 'Readme2022')  {
+    $dsn = "gmail+smtp://{$sender_login}:{$sender_pass}@default";
+    $transport = Transport::fromDsn($dsn);
+
+    $sql_post_author = "SELECT id, login FROM users WHERE id = ?";
+    $author = get_db_data($db_connect, $sql_post_author, [$post_author])[0];
+
+    $sql_subscribers = "SELECT s.follower, u.login, u.email
+                        FROM subscribes s
+                        JOIN users u ON s.follower = u.id
+                        WHERE host = ?";
+    $subscribers = get_db_data($db_connect, $sql_subscribers, [$post_author]);
+
+    $subject = "Новая публикация от пользователя {$author['login']}}";
+
+    foreach ($subscribers as $subscriber) {
+        $text = "Здравствуйте, {$subscriber['login']}.\nПользователь {$author['login']} только что опубликовал новую запись „{$post['title']}“.\nПосмотрите её на странице пользователя: http://{$_SERVER['HTTP_HOST']}/profile.php?user={$author['id']}";
+
+        $messege_post = (new Email())
+            ->to($subscriber['email'])
+            ->from($sender_login)
+            ->subject($subject)
+            ->text($text);
+
+        $mailer = new Mailer($transport);
+        $mailer->send($messege_post);
+    }
 }

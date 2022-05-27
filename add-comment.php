@@ -28,7 +28,7 @@ $comment = $_POST;
 $comment['comment'] = trim($comment['comment'], ' ');
 $errors = validate($comment ?? [], $validation_rules, $db_connect);
 
-if (count($errors)) {
+if (count($errors) !== 0) {
     $_SESSION['comment_errors'] = $errors;
     header("Location: {$current_url}");
     die();

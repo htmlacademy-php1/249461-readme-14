@@ -12,9 +12,11 @@
                            placeholder="Введите заголовок" value="<?= get_post_val('title') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
-                    </div>
+                    <?php if(isset($errors['title'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['title']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -25,9 +27,11 @@
                            placeholder="Введите ссылку" value="<?= get_post_val('image_link') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['image_link']) ?></p>
-                    </div>
+                    <?php if(isset($errors['image_link'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['image_link']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -38,9 +42,11 @@
                            placeholder="Введите теги" value="<?= get_post_val('tags') ?>">
                     <button class="form__error-button button" type="button">!<span
                             class="visually-hidden">Информация об ошибке</span></button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
-                    </div>
+                    <?php if(isset($errors['tags'])): ?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['tags']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -56,25 +62,10 @@
         <?php endif; ?>
     </div>
     <div class="adding-post__input-file-container form__input-container form__input-container--file">
-        <div
-            class="adding-post__input-file-wrapper form__input-file-wrapper <?= isset($errors['tags']) ? 'form__input-section--error' : '' ?>">
+        <div class="adding-post__input-file-wrapper form__input-file-wrapper <?= isset($errors['tags']) ? 'form__input-section--error' : '' ?>">
             <input class="adding-post__input-file form__input-file2" id="userpic-file-photo" type="file" name="image"
                    title=" " value="<?= get_post_val('tags') ?>">
-            <!--<div class="adding-post__file-zone adding-post__file-zone--photo form__file-zone dropzone">
-                <div class="form__file-zone-text">
-                    <span>Перетащите фото сюда</span>
-                </div>
-            </div>
-            <button class="adding-post__input-file-button form__input-file-button form__input-file-button--photo button" type="button">
-                <span>Выбрать фото</span>
-                <svg class="adding-post__attach-icon form__attach-icon" width="10" height="20">
-                    <use xlink:href="#icon-attach"></use>
-                </svg>
-            </button>-->
         </div>
-        <!--<div class="adding-post__file adding-post__file--photo form__file dropzone-previews">
-
-        </div>-->
     </div>
     <div class="adding-post__buttons">
         <button class="adding-post__submit button button--main" type="submit">Опубликовать</button>

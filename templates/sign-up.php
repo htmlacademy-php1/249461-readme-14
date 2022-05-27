@@ -16,9 +16,11 @@
                                    name="email" placeholder="Укажите эл.почту" value="<?= get_post_val('email') ?>">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
-                            <div class="form__error-text">
-                                <p class="form__error-desc"><?= htmlspecialchars($errors['email']) ?></p>
-                            </div>
+                            <?php if (isset($errors['email'])):?>
+                                <div class="form__error-text">
+                                    <p class="form__error-desc"><?= htmlspecialchars($errors['email']) ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div
@@ -30,9 +32,11 @@
                                    name="login" placeholder="Укажите логин" value="<?= get_post_val('login') ?>">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
-                            <div class="form__error-text">
-                                <p class="form__error-desc"><?= htmlspecialchars($errors['login']) ?></p>
-                            </div>
+                            <?php if (isset($errors['login'])):?>
+                                <div class="form__error-text">
+                                    <p class="form__error-desc"><?= htmlspecialchars($errors['login']) ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div
@@ -45,9 +49,11 @@
                                    value="<?= get_post_val('user_pass') ?>">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
-                            <div class="form__error-text">
-                                <p class="form__error-desc"><?= htmlspecialchars($errors['user_pass']) ?></p>
-                            </div>
+                            <?php if (isset($errors['user_pass'])):?>
+                                <div class="form__error-text">
+                                    <p class="form__error-desc"><?= htmlspecialchars($errors['user_pass']) ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div
@@ -60,9 +66,11 @@
                                    value="<?= get_post_val('password_repeat') ?>">
                             <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
-                            <div class="form__error-text">
-                                <p class="form__error-desc"><?= htmlspecialchars($errors['password_repeat']) ?></p>
-                            </div>
+                            <?php if (isset($errors['password_repeat'])):?>
+                                <div class="form__error-text">
+                                    <p class="form__error-desc"><?= htmlspecialchars($errors['password_repeat']) ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -81,21 +89,7 @@
                 <div class="registration__input-file-wrapper form__input-file-wrapper">
                     <input class="registration__input-file form__input-file2" id="userpic-file" type="file"
                            name="avatar" title=" ">
-                    <!--<div class="registration__file-zone form__file-zone dropzone">
-                        <div class="form__file-zone-text">
-                            <span>Перетащите фото сюда</span>
-                        </div>
-                    </div>
-                    <button class="registration__input-file-button form__input-file-button button" type="button">
-                        <span>Выбрать фото</span>
-                        <svg class="registration__attach-icon form__attach-icon" width="10" height="20">
-                            <use xlink:href="#icon-attach"></use>
-                        </svg>
-                    </button>-->
                 </div>
-                <!--<div class="registration__file form__file dropzone-previews">
-
-                </div>-->
             </div>
             <button class="registration__submit button button--main" type="submit">Отправить</button>
         </form>

@@ -10,7 +10,7 @@
                         <?php foreach ($types as $type) : ?>
                             <li class="adding-post__tabs-item filters__item">
                                 <a href="add.php?type=<?= htmlspecialchars($type['id']) ?>"
-                                   class="adding-post__tabs-link filters__button filters__button--<?= htmlspecialchars($type['class']) ?> <?= $current_type_id == htmlspecialchars($type['id']) ? 'filters__button--active' : ''; ?> tabs__item tabs__item--active button">
+                                   class="adding-post__tabs-link filters__button filters__button--<?= htmlspecialchars($type['class']) ?> <?= $current_type_id === htmlspecialchars($type['id']) ? 'filters__button--active' : ''; ?> tabs__item tabs__item--active button">
                                     <svg class="filters__icon" width="22" height="18">
                                         <use xlink:href="#icon-filter-<?= htmlspecialchars($type['class']) ?>"></use>
                                     </svg>

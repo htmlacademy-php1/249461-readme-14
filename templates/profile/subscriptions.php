@@ -6,8 +6,10 @@
                 <div class="post-mini__user-info user__info">
                     <div class="post-mini__avatar user__avatar">
                         <a class="user__avatar-link" href="profile.php?user=<?= $subscribe['id'] ?>">
+                            <?php if (isset($subscribe['avatar'])):?>
                             <img class="post-mini__picture user__picture" src="<?= $subscribe['avatar'] ?>"
                                  alt="Аватар пользователя">
+                            <?php endif;?>
                         </a>
                     </div>
                     <div class="post-mini__name-wrapper user__name-wrapper">

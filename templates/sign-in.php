@@ -13,9 +13,11 @@
                            placeholder="Укажите эл.почту" value="<?= get_post_val('login') ?>">
                     <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['login']) ?></p>
-                    </div>
+                    <?php if (isset($errors['login'])):?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['login']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div
@@ -26,9 +28,11 @@
                            placeholder="Введите пароль">
                     <button class="form__error-button button button--main" type="button">!<span class="visually-hidden">Информация об ошибке</span>
                     </button>
-                    <div class="form__error-text">
-                        <p class="form__error-desc"><?= htmlspecialchars($errors['password']) ?></p>
-                    </div>
+                    <?php if (isset($errors['password'])):?>
+                        <div class="form__error-text">
+                            <p class="form__error-desc"><?= htmlspecialchars($errors['password']) ?></p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <button class="login__submit button button--main" type="submit">Отправить</button>
