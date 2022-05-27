@@ -96,11 +96,13 @@
                         </div>
                         <?php endif; ?>
                     </div>
-                    <div class="form__input-section">
-                        <input type="hidden" class="form__input" name="receiver" value="<?=htmlspecialchars($active_chat_user['id'])?>">
-                        <label class="visually-hidden">Получатель сообщения</label>
-                    </div>
-                    <button class="comments__submit button button--green" type="submit">Отправить</button>
+                    <?php if (isset($active_chat_user['id'])): ?>
+                        <div class="form__input-section">
+                            <input type="hidden" class="form__input" name="receiver" value="<?=htmlspecialchars($active_chat_user['id'])?>">
+                            <label class="visually-hidden">Получатель сообщения</label>
+                        </div>
+                    <?php endif; ?>
+                    <button class="comments__submit button <?= $active_chat === 0 ? "button--quartz" : "button--green" ?>" <?= $active_chat === 0 ? "disabled" : "" ?> type="submit">Отправить</button>
                 </form>
             </div>
         </div>

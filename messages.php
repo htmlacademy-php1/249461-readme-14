@@ -29,7 +29,8 @@ if (isset($_GET['chat']) || !empty($users_id)) {
 if ($active_chat === 0) {
     $content_data = [
         'no_chats' => true,
-        'current_user' => $current_user
+        'current_user' => $current_user,
+        'active_chat' => $active_chat
     ];
 
     print_messages_page($content_data, $current_user);
